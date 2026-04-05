@@ -1,6 +1,6 @@
 'use client'
 import { useRef, useState } from 'react'
-import { motion, useInView } from 'framer-motion'
+import { motion, useScroll, useTransform, useInView } from 'framer-motion'
 
 type Category = 'ALL' | 'PHOTO' | 'VIDEO' | 'BRANDING'
 
@@ -11,7 +11,8 @@ interface Project {
   category: string
   type: Category[]
   bgStyle: React.CSSProperties
-  size: 'wide' | 'tall' | 'standard'
+  speed: number   // parallax multiplier — higher = faster inner scroll
+  zLayer: number  // z-index for overlap stacking
 }
 
 const PROJECTS: Project[] = [
@@ -22,7 +23,8 @@ const PROJECTS: Project[] = [
     category: 'Photo · Video',
     type: ['PHOTO', 'VIDEO'],
     bgStyle: { background: 'linear-gradient(145deg, #0a0e1c 0%, #0d1326 60%, #07090f 100%)' },
-    size: 'wide',
+    speed: 0.12,
+    zLayer: 10,
   },
   {
     id: '02',
@@ -31,7 +33,8 @@ const PROJECTS: Project[] = [
     category: 'Photography',
     type: ['PHOTO'],
     bgStyle: { background: 'linear-gradient(155deg, #0c1209 0%, #14190b 55%, #090c06 100%)' },
-    size: 'tall',
+    speed: 0.18,
+    zLayer: 12,
   },
   {
     id: '03',
@@ -40,7 +43,8 @@ const PROJECTS: Project[] = [
     category: 'Photo · Video',
     type: ['PHOTO', 'VIDEO'],
     bgStyle: { background: 'linear-gradient(135deg, #120a09 0%, #1b100d 55%, #0c0807 100%)' },
-    size: 'standard',
+    speed: 0.10,
+    zLayer: 20,
   },
   {
     id: '04',
@@ -49,7 +53,8 @@ const PROJECTS: Project[] = [
     category: 'Documentary Film',
     type: ['VIDEO'],
     bgStyle: { background: 'linear-gradient(145deg, #0f0f0e 0%, #181815 55%, #0b0b0a 100%)' },
-    size: 'standard',
+    speed: 0.22,
+    zLayer: 22,
   },
   {
     id: '05',
@@ -58,7 +63,8 @@ const PROJECTS: Project[] = [
     category: 'Photo · Branding',
     type: ['PHOTO', 'BRANDING'],
     bgStyle: { background: 'linear-gradient(155deg, #090d0d 0%, #0e1515 55%, #070b0b 100%)' },
-    size: 'wide',
+    speed: 0.08,
+    zLayer: 24,
   },
   {
     id: '06',
@@ -67,101 +73,127 @@ const PROJECTS: Project[] = [
     category: 'Photo · Video',
     type: ['PHOTO', 'VIDEO'],
     bgStyle: { background: 'linear-gradient(135deg, #0c100a 0%, #121a0f 55%, #090d07 100%)' },
-    size: 'tall',
+    speed: 0.16,
+    zLayer: 30,
   },
 ]
 
 const FILTERS: Category[] = ['ALL', 'PHOTO', 'VIDEO', 'BRANDING']
 
-function ProjectCard({ project, index }: { project: Project; index: number }) {
-  const ref    = useRef(null)
-  const inView = useInView(ref, { once: true, margin: '-60px' })
+// ─── Individual parallax card ───────────────────────────────────────────────
+function ParallaxCard({
+  project,
+  className = '',
+}: {
+  project: Project
+  className?: string
+}) {
+  const ref = useRef<HTMLDivElement>(null)
+  const { scrollYProgress } = useScroll({
+    target: ref,
+    offset: ['start end', 'end start'],
+  })
+
+  // Inner image moves at project.speed relative to scroll
+  const innerY = useTransform(
+    scrollYProgress,
+    [0, 1],
+    [`-${project.speed * 100}%`, `${project.speed * 100}%`]
+  )
 
   return (
-    <motion.div
+    <div
       ref={ref}
-      initial={{ opacity: 0, y: 32 }}
-      animate={inView ? { opacity: 1, y: 0 } : {}}
-      transition={{ duration: 0.8, delay: index * 0.1, ease: [0.16, 1, 0.3, 1] }}
-      className={`group relative overflow-hidden cursor-pointer ${
-        project.size === 'wide' ? 'md:col-span-2' : ''
-      } ${project.size === 'tall' ? 'row-span-2' : ''}`}
+      className={`relative overflow-hidden group cursor-pointer ${className}`}
+      style={{ zIndex: project.zLayer }}
     >
-      {/* Background */}
-      <div
-        className="absolute inset-0 transition-transform duration-700 ease-out group-hover:scale-105"
-        style={project.bgStyle}
-      />
-
       {/*
-        DROP PROJECT IMAGE HERE:
+        ── SWAP THIS FOR YOUR REAL IMAGE ──
+        Replace the gradient div below with:
         <Image
           src={`/media/projects/${project.id}.jpg`}
           alt={project.title}
           fill
-          className="object-cover transition-transform duration-700 ease-out group-hover:scale-105"
+          className="object-cover"
+          sizes="(max-width: 768px) 100vw, 60vw"
+        />
+
+        Or for video:
+        <video autoPlay muted loop playsInline
+          src={`/media/projects/${project.id}.mp4`}
+          className="absolute inset-0 w-full h-full object-cover"
         />
       */}
-
-      {/* Placeholder label */}
-      <div className="absolute top-4 left-4 font-body text-[8px] tracking-[0.3em] text-dm-border uppercase z-10">
-        [ project-{project.id}.jpg ]
-      </div>
-
-      {/* Hover overlay */}
-      <div className="absolute inset-0 bg-gradient-to-t from-dm-black/90 via-dm-black/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-400" />
-      <div className="absolute inset-0 bg-dm-black/20 group-hover:bg-dm-black/0 transition-colors duration-400" />
-
-      {/* Content — slides up on hover */}
-      <div
-        className="absolute bottom-0 left-0 right-0 p-6 md:p-8 translate-y-4 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-400 ease-out"
+      <motion.div
+        style={{ y: innerY }}
+        className="absolute inset-0 scale-[1.35] will-change-transform"
       >
-        <span className="block font-body text-[9px] tracking-[0.35em] text-dm-secondary uppercase mb-2">
+        <div className="absolute inset-0" style={project.bgStyle} />
+        {/* Placeholder label — remove when real images are dropped in */}
+        <div className="absolute bottom-4 left-4 font-body text-[8px] tracking-[0.3em] text-white/20 uppercase">
+          [ {project.id}.jpg / {project.id}.mp4 ]
+        </div>
+      </motion.div>
+
+      {/* Hover gradient reveal */}
+      <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 ease-out" />
+
+      {/* Info slides up on hover */}
+      <div className="absolute bottom-0 left-0 right-0 p-6 md:p-8 translate-y-3 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-500 ease-out">
+        <span className="block font-body text-[9px] tracking-[0.38em] text-white/60 uppercase mb-2">
           {project.category}
         </span>
-        <h3 className="font-display text-3xl md:text-4xl tracking-wider text-dm-white uppercase leading-none mb-1">
+        <h3
+          className="font-display tracking-wider text-white uppercase leading-none mb-1"
+          style={{ fontSize: 'clamp(22px, 3vw, 44px)' }}
+        >
           {project.title}
         </h3>
-        <p className="font-body font-light text-dm-secondary text-xs tracking-wide">
+        <p className="font-body font-light text-white/50 text-xs tracking-wide">
           {project.subtitle}
         </p>
-        <div className="mt-4 flex items-center gap-2 font-body text-[9px] tracking-[0.3em] text-dm-muted uppercase">
+        <div className="mt-5 flex items-center gap-2 font-body text-[9px] tracking-[0.3em] text-white/40 uppercase">
           <span>View Case Study</span>
-          <span className="block w-6 h-px bg-dm-muted" />
+          <span className="block w-6 h-px bg-white/40" />
         </div>
       </div>
 
-      {/* ID watermark */}
-      <div className="absolute top-4 right-4 font-display text-[10rem] leading-none text-dm-white/[0.03] select-none pointer-events-none">
+      {/* Large ID watermark */}
+      <div className="absolute top-3 right-4 font-display text-[8rem] leading-none text-white/[0.04] select-none pointer-events-none">
         {project.id}
       </div>
-
-      {/* Aspect ratio spacer */}
-      <div className={`${project.size === 'tall' ? 'aspect-[3/4]' : 'aspect-[4/3]'} md:aspect-auto md:h-72 lg:h-80`} />
-    </motion.div>
+    </div>
   )
 }
 
+// ─── Main section ───────────────────────────────────────────────────────────
 export default function Portfolio() {
   const [filter, setFilter] = useState<Category>('ALL')
-  const ref    = useRef(null)
-  const inView = useInView(ref, { once: true, margin: '-80px' })
+  const headerRef = useRef(null)
+  const inView    = useInView(headerRef, { once: true, margin: '-60px' })
 
   const filtered = filter === 'ALL'
     ? PROJECTS
     : PROJECTS.filter((p) => p.type.includes(filter))
 
+  // Ensure we always have at least 6 slots (pad with first item if filtered down)
+  const padded = [...filtered]
+  while (padded.length < 4) padded.push(filtered[0])
+
+  const [p1, p2, p3, p4, p5, p6] = padded
+
   return (
-    <section id="work" className="bg-dm-black border-b border-dm-border py-24 md:py-36">
-      <div className="max-w-screen-xl mx-auto px-6 lg:px-12">
-        {/* Section header */}
-        <div className="flex items-end justify-between flex-wrap gap-6 mb-10 md:mb-14">
+    <section id="work" className="bg-dm-black">
+
+      {/* ── Section header — contained, sits above the bleed grid ── */}
+      <div className="max-w-screen-xl mx-auto px-6 lg:px-12 pt-20 md:pt-28 pb-10">
+        <div className="flex items-end justify-between flex-wrap gap-6">
           <div>
             <span className="block font-body text-[10px] tracking-[0.4em] text-dm-muted uppercase mb-4">
-              03 — Selected Work
+              01 — Selected Work
             </span>
             <motion.h2
-              ref={ref}
+              ref={headerRef}
               initial={{ opacity: 0, y: 24 }}
               animate={inView ? { opacity: 1, y: 0 } : {}}
               transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
@@ -180,7 +212,7 @@ export default function Portfolio() {
                 onClick={() => setFilter(f)}
                 className={`font-body text-[9px] tracking-[0.28em] px-4 py-2.5 border transition-all duration-200 ${
                   filter === f
-                    ? 'border-dm-white/60 text-dm-white bg-dm-white/8'
+                    ? 'border-dm-white/60 text-dm-white'
                     : 'border-dm-border text-dm-muted hover:border-dm-secondary hover:text-dm-secondary'
                 }`}
               >
@@ -189,24 +221,75 @@ export default function Portfolio() {
             ))}
           </div>
         </div>
+      </div>
 
-        {/* Portfolio grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 md:gap-4">
-          {filtered.map((project, i) => (
-            <ProjectCard key={project.id} project={project} index={i} />
-          ))}
+      {/* ── WALL-TO-WALL grid — no horizontal margins ── */}
+      <div className="w-full">
+
+        {/* Row 1: 62% | 38% */}
+        <div className="flex w-full relative" style={{ zIndex: 10 }}>
+          {p1 && (
+            <ParallaxCard
+              project={p1}
+              className="w-[62%] h-[65vh] min-h-[400px]"
+            />
+          )}
+          {p2 && (
+            <ParallaxCard
+              project={p2}
+              className="w-[38%] h-[65vh] min-h-[400px]"
+            />
+          )}
         </div>
 
-        {/* View all CTA */}
-        <div className="mt-14 flex justify-center">
-          <a
-            href="#contact"
-            className="flex items-center gap-4 font-body text-xs tracking-[0.3em] text-dm-secondary hover:text-dm-white transition-colors duration-300 uppercase group"
+        {/* Row 2: 33% | 34% | 33% — overlaps row 1 by 5vh */}
+        <div
+          className="flex w-full relative"
+          style={{ marginTop: '-5vh', zIndex: 20 }}
+        >
+          {p3 && (
+            <ParallaxCard
+              project={p3}
+              className="w-1/3 h-[58vh] min-h-[340px]"
+            />
+          )}
+          {p4 && (
+            <ParallaxCard
+              project={p4}
+              className="w-1/3 h-[58vh] min-h-[340px]"
+            />
+          )}
+          {p5 && (
+            <ParallaxCard
+              project={p5}
+              className="w-1/3 h-[58vh] min-h-[340px]"
+            />
+          )}
+        </div>
+
+        {/* Row 3: 100% full bleed — overlaps row 2 by 4vh */}
+        {p6 && (
+          <div
+            className="w-full relative"
+            style={{ marginTop: '-4vh', zIndex: 30 }}
           >
-            <span>Start Your Project</span>
-            <span className="block w-10 h-px bg-current transition-all duration-300 group-hover:w-14" />
-          </a>
-        </div>
+            <ParallaxCard
+              project={p6}
+              className="w-full h-[52vh] min-h-[300px]"
+            />
+          </div>
+        )}
+      </div>
+
+      {/* ── Footer CTA — back inside margins ── */}
+      <div className="max-w-screen-xl mx-auto px-6 lg:px-12 py-16 flex justify-center">
+        <a
+          href="#contact"
+          className="flex items-center gap-4 font-body text-xs tracking-[0.3em] text-dm-secondary hover:text-dm-white transition-colors duration-300 uppercase group"
+        >
+          <span>Start Your Project</span>
+          <span className="block w-10 h-px bg-current transition-all duration-300 group-hover:w-14" />
+        </a>
       </div>
     </section>
   )
