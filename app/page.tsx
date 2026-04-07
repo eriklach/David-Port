@@ -1,5 +1,6 @@
 import Navigation from './components/Navigation'
 import Hero from './components/Hero'
+import SizzleReel from './components/SizzleReel'
 import Marquee from './components/Marquee'
 import Portfolio from './components/Portfolio'
 import Services from './components/Services'
@@ -14,6 +15,7 @@ export default function Home() {
     <main className="bg-dm-black">
       <Navigation />
       <Hero />
+      <SizzleReel />
       <Marquee />
       <Portfolio />
       <Services />

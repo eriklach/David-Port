@@ -58,7 +58,7 @@ export default function About() {
               BUILT FOR
               <br />
               THE&nbsp;
-              <span className="text-dm-secondary">FIELD.</span>
+              <span className="text-dm-secondary">MOMENT.</span>
             </h2>
 
             {/* Placeholder image area */}
@@ -87,15 +87,15 @@ export default function About() {
               transition={{ duration: 0.9, delay: 0.2, ease: 'easeOut' }}
             >
               <p className="font-body font-light text-dm-secondary text-lg md:text-xl leading-relaxed mb-6">
-                Draupnir Media is a full-service outdoor and sports media agency. We
-                create photography, film, and brand content for athletes, events, and
-                the companies that equip them.
+                Draupnir Media is a full-service experiential marketing and events
+                agency. We create the moments, then make sure the world sees them —
+                through photography, film, brand strategy, and digital presence.
               </p>
               <p className="font-body font-light text-dm-muted text-base leading-relaxed">
-                We got into this because we live it. Every shoot is a mission — whether
-                it&apos;s on a snowfield, a climbing wall, or inside a combat gym. We
-                understand the culture because we&apos;re part of it. That authenticity
-                shows up in every frame.
+                From large-scale brand activations to intimate event coverage, we
+                handle the full media stack. Strategy, production, post — all under
+                one roof, with a team that&apos;s been on the ground for every kind
+                of event imaginable.
               </p>
             </motion.div>
 

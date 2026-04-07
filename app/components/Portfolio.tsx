@@ -1,100 +1,94 @@
 'use client'
-import { useRef, useState } from 'react'
+import { useRef } from 'react'
 import { motion, useScroll, useTransform, useInView } from 'framer-motion'
-
-type Category = 'ALL' | 'PHOTO' | 'VIDEO' | 'BRANDING'
 
 interface Project {
   id: string
   title: string
   subtitle: string
   category: string
-  type: Category[]
   bgStyle: React.CSSProperties
-  speed: number   // parallax multiplier — higher = faster inner scroll
-  zLayer: number  // z-index for overlap stacking
+  speed: number   // inner parallax rate
+  zIndex: number  // stacking layer (weaves left/right columns over each other)
+  aspect: string  // tailwind aspect-ratio class
 }
 
-const PROJECTS: Project[] = [
+// LEFT column — 3 items
+const LEFT: Project[] = [
   {
     id: '01',
     title: 'Peak Season',
-    subtitle: 'Snowboard Editorial — BC Backcountry',
+    subtitle: 'Brand Activation — BC Backcountry',
     category: 'Photo · Video',
-    type: ['PHOTO', 'VIDEO'],
     bgStyle: { background: 'linear-gradient(145deg, #0a0e1c 0%, #0d1326 60%, #07090f 100%)' },
-    speed: 0.12,
-    zLayer: 10,
+    speed: 0.10,
+    zIndex: 10,
+    aspect: 'aspect-[4/3]',
   },
+  {
+    id: '03',
+    title: 'Iron Circuit',
+    subtitle: 'Event Coverage — Combat Sports',
+    category: 'Photo · Video',
+    bgStyle: { background: 'linear-gradient(135deg, #120a09 0%, #1b100d 55%, #0c0807 100%)' },
+    speed: 0.16,
+    zIndex: 30,
+    aspect: 'aspect-[3/4]',
+  },
+  {
+    id: '05',
+    title: 'Above the Line',
+    subtitle: 'Experiential Campaign — Coastal Trail',
+    category: 'Photo · Branding',
+    bgStyle: { background: 'linear-gradient(155deg, #090d0d 0%, #0e1515 55%, #070b0b 100%)' },
+    speed: 0.08,
+    zIndex: 30,
+    aspect: 'aspect-[4/3]',
+  },
+]
+
+// RIGHT column — 3 items
+const RIGHT: Project[] = [
   {
     id: '02',
     title: 'Vertical',
     subtitle: 'Sport Climbing Series — Squamish',
     category: 'Photography',
-    type: ['PHOTO'],
     bgStyle: { background: 'linear-gradient(155deg, #0c1209 0%, #14190b 55%, #090c06 100%)' },
-    speed: 0.18,
-    zLayer: 12,
-  },
-  {
-    id: '03',
-    title: 'Iron Circuit',
-    subtitle: 'Combat Sports Event — Grappling & Judo',
-    category: 'Photo · Video',
-    type: ['PHOTO', 'VIDEO'],
-    bgStyle: { background: 'linear-gradient(135deg, #120a09 0%, #1b100d 55%, #0c0807 100%)' },
-    speed: 0.10,
-    zLayer: 20,
+    speed: 0.20,
+    zIndex: 20,
+    aspect: 'aspect-[2/3]',
   },
   {
     id: '04',
     title: 'Urban Flow',
-    subtitle: 'Parkour Documentary — Vancouver',
-    category: 'Documentary Film',
-    type: ['VIDEO'],
+    subtitle: 'Experiential Documentary — Vancouver',
+    category: 'Film',
     bgStyle: { background: 'linear-gradient(145deg, #0f0f0e 0%, #181815 55%, #0b0b0a 100%)' },
-    speed: 0.22,
-    zLayer: 22,
-  },
-  {
-    id: '05',
-    title: 'Above the Line',
-    subtitle: 'Hiking Brand Campaign — Coastal Trail',
-    category: 'Photo · Branding',
-    type: ['PHOTO', 'BRANDING'],
-    bgStyle: { background: 'linear-gradient(155deg, #090d0d 0%, #0e1515 55%, #070b0b 100%)' },
-    speed: 0.08,
-    zLayer: 24,
+    speed: 0.13,
+    zIndex: 20,
+    aspect: 'aspect-[4/3]',
   },
   {
     id: '06',
     title: 'Threshold',
-    subtitle: 'Trail Running Event — 50k Race Coverage',
+    subtitle: 'Brand Event — 50k Race',
     category: 'Photo · Video',
-    type: ['PHOTO', 'VIDEO'],
     bgStyle: { background: 'linear-gradient(135deg, #0c100a 0%, #121a0f 55%, #090d07 100%)' },
-    speed: 0.16,
-    zLayer: 30,
+    speed: 0.18,
+    zIndex: 40,
+    aspect: 'aspect-[3/4]',
   },
 ]
 
-const FILTERS: Category[] = ['ALL', 'PHOTO', 'VIDEO', 'BRANDING']
-
-// ─── Individual parallax card ───────────────────────────────────────────────
-function ParallaxCard({
-  project,
-  className = '',
-}: {
-  project: Project
-  className?: string
-}) {
+// ─── Parallax card ──────────────────────────────────────────────────────────
+function CollageCard({ project }: { project: Project }) {
   const ref = useRef<HTMLDivElement>(null)
   const { scrollYProgress } = useScroll({
     target: ref,
     offset: ['start end', 'end start'],
   })
 
-  // Inner image moves at project.speed relative to scroll
   const innerY = useTransform(
     scrollYProgress,
     [0, 1],
@@ -104,63 +98,53 @@ function ParallaxCard({
   return (
     <div
       ref={ref}
-      className={`relative overflow-hidden group cursor-pointer ${className}`}
-      style={{ zIndex: project.zLayer }}
+      className={`relative overflow-hidden group cursor-pointer ${project.aspect}`}
+      style={{ zIndex: project.zIndex }}
     >
       {/*
-        ── SWAP THIS FOR YOUR REAL IMAGE ──
-        Replace the gradient div below with:
+        ── DROP YOUR REAL IMAGE/VIDEO HERE ──────────────────────────────────
         <Image
           src={`/media/projects/${project.id}.jpg`}
           alt={project.title}
           fill
           className="object-cover"
-          sizes="(max-width: 768px) 100vw, 60vw"
+          sizes="60vw"
         />
-
         Or for video:
         <video autoPlay muted loop playsInline
           src={`/media/projects/${project.id}.mp4`}
           className="absolute inset-0 w-full h-full object-cover"
         />
       */}
+
+      {/* Inner parallaxing layer — scaled so edges never show */}
       <motion.div
         style={{ y: innerY }}
-        className="absolute inset-0 scale-[1.35] will-change-transform"
+        className="absolute inset-0 scale-[1.4] will-change-transform"
       >
         <div className="absolute inset-0" style={project.bgStyle} />
-        {/* Placeholder label — remove when real images are dropped in */}
-        <div className="absolute bottom-4 left-4 font-body text-[8px] tracking-[0.3em] text-white/20 uppercase">
-          [ {project.id}.jpg / {project.id}.mp4 ]
+        <div className="absolute bottom-3 left-3 font-body text-[8px] tracking-[0.3em] text-white/15 uppercase">
+          [ {project.id}.jpg ]
         </div>
       </motion.div>
 
-      {/* Hover gradient reveal */}
-      <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 ease-out" />
+      {/* Hover gradient */}
+      <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/15 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
 
-      {/* Info slides up on hover */}
-      <div className="absolute bottom-0 left-0 right-0 p-6 md:p-8 translate-y-3 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-500 ease-out">
-        <span className="block font-body text-[9px] tracking-[0.38em] text-white/60 uppercase mb-2">
+      {/* Info — slides up on hover */}
+      <div className="absolute bottom-0 left-0 right-0 p-5 md:p-6 translate-y-3 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-500 ease-out">
+        <span className="block font-body text-[8px] tracking-[0.38em] text-white/55 uppercase mb-1.5">
           {project.category}
         </span>
         <h3
           className="font-display tracking-wider text-white uppercase leading-none mb-1"
-          style={{ fontSize: 'clamp(22px, 3vw, 44px)' }}
+          style={{ fontSize: 'clamp(18px, 2.5vw, 36px)' }}
         >
           {project.title}
         </h3>
-        <p className="font-body font-light text-white/50 text-xs tracking-wide">
+        <p className="font-body font-light text-white/45 text-xs tracking-wide">
           {project.subtitle}
         </p>
-        <div className="mt-5 flex items-center gap-2 font-body text-[9px] tracking-[0.3em] text-white/40 uppercase">
-          <span>View Case Study</span>
-          <span className="block w-6 h-px bg-white/40" />
-        </div>
-      </div>
-
-      {/* Large ID watermark */}
-      <div className="absolute top-3 right-4 font-display text-[8rem] leading-none text-white/[0.04] select-none pointer-events-none">
-        {project.id}
       </div>
     </div>
   )
@@ -168,26 +152,15 @@ function ParallaxCard({
 
 // ─── Main section ───────────────────────────────────────────────────────────
 export default function Portfolio() {
-  const [filter, setFilter] = useState<Category>('ALL')
   const headerRef = useRef(null)
   const inView    = useInView(headerRef, { once: true, margin: '-60px' })
-
-  const filtered = filter === 'ALL'
-    ? PROJECTS
-    : PROJECTS.filter((p) => p.type.includes(filter))
-
-  // Ensure we always have at least 6 slots (pad with first item if filtered down)
-  const padded = [...filtered]
-  while (padded.length < 4) padded.push(filtered[0])
-
-  const [p1, p2, p3, p4, p5, p6] = padded
 
   return (
     <section id="work" className="bg-dm-black">
 
-      {/* ── Section header — contained, sits above the bleed grid ── */}
+      {/* Section label */}
       <div className="max-w-screen-xl mx-auto px-6 lg:px-12 pt-20 md:pt-28 pb-10">
-        <div className="flex items-end justify-between flex-wrap gap-6">
+        <div className="flex items-end justify-between flex-wrap gap-4">
           <div>
             <span className="block font-body text-[10px] tracking-[0.4em] text-dm-muted uppercase mb-4">
               01 — Selected Work
@@ -203,86 +176,48 @@ export default function Portfolio() {
               THE WORK
             </motion.h2>
           </div>
-
-          {/* Filter pills */}
-          <div className="flex gap-2 flex-wrap">
-            {FILTERS.map((f) => (
-              <button
-                key={f}
-                onClick={() => setFilter(f)}
-                className={`font-body text-[9px] tracking-[0.28em] px-4 py-2.5 border transition-all duration-200 ${
-                  filter === f
-                    ? 'border-dm-white/60 text-dm-white'
-                    : 'border-dm-border text-dm-muted hover:border-dm-secondary hover:text-dm-secondary'
-                }`}
-              >
-                {f}
-              </button>
-            ))}
-          </div>
+          <p className="hidden md:block font-body font-light text-dm-muted text-sm max-w-xs text-right leading-relaxed">
+            Experiences, events, and brand activations — captured and crafted.
+          </p>
         </div>
       </div>
 
-      {/* ── WALL-TO-WALL grid — no horizontal margins ── */}
-      <div className="w-full">
+      {/* ── COLLAGE — two overlapping columns ── */}
+      {/*
+        Left column:  58% wide, starts flush left
+        Right column: 58% wide, overlaps left by ~16%, starts ~18vh lower
+        Z-index weaves so columns alternate in front/behind each other
+        Each image parallaxes independently at a unique rate
+      */}
+      <div className="relative flex items-start w-full overflow-visible pb-20">
 
-        {/* Row 1: 62% | 38% */}
-        <div className="flex w-full relative" style={{ zIndex: 10 }}>
-          {p1 && (
-            <ParallaxCard
-              project={p1}
-              className="w-[62%] h-[65vh] min-h-[400px]"
-            />
-          )}
-          {p2 && (
-            <ParallaxCard
-              project={p2}
-              className="w-[38%] h-[65vh] min-h-[400px]"
-            />
-          )}
-        </div>
-
-        {/* Row 2: 33% | 34% | 33% — overlaps row 1 by 5vh */}
+        {/* Left column */}
         <div
-          className="flex w-full relative"
-          style={{ marginTop: '-5vh', zIndex: 20 }}
+          className="flex flex-col gap-3 shrink-0"
+          style={{ width: '58%' }}
         >
-          {p3 && (
-            <ParallaxCard
-              project={p3}
-              className="w-1/3 h-[58vh] min-h-[340px]"
-            />
-          )}
-          {p4 && (
-            <ParallaxCard
-              project={p4}
-              className="w-1/3 h-[58vh] min-h-[340px]"
-            />
-          )}
-          {p5 && (
-            <ParallaxCard
-              project={p5}
-              className="w-1/3 h-[58vh] min-h-[340px]"
-            />
-          )}
+          {LEFT.map((project) => (
+            <CollageCard key={project.id} project={project} />
+          ))}
         </div>
 
-        {/* Row 3: 100% full bleed — overlaps row 2 by 4vh */}
-        {p6 && (
-          <div
-            className="w-full relative"
-            style={{ marginTop: '-4vh', zIndex: 30 }}
-          >
-            <ParallaxCard
-              project={p6}
-              className="w-full h-[52vh] min-h-[300px]"
-            />
-          </div>
-        )}
+        {/* Right column — overlaps left, offset down */}
+        <div
+          className="flex flex-col gap-3 shrink-0"
+          style={{
+            width: '58%',
+            marginLeft: '-16%',
+            paddingTop: '18vh',
+          }}
+        >
+          {RIGHT.map((project) => (
+            <CollageCard key={project.id} project={project} />
+          ))}
+        </div>
       </div>
 
-      {/* ── Footer CTA — back inside margins ── */}
-      <div className="max-w-screen-xl mx-auto px-6 lg:px-12 py-16 flex justify-center">
+      {/* CTA */}
+      <div className="max-w-screen-xl mx-auto px-6 lg:px-12 pb-20 flex justify-center">
         <a
           href="#contact"
           className="flex items-center gap-4 font-body text-xs tracking-[0.3em] text-dm-secondary hover:text-dm-white transition-colors duration-300 uppercase group"

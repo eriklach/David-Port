@@ -78,11 +78,11 @@ export default function Manifesto() {
           className="font-display leading-[0.9] tracking-wider uppercase"
           style={{ fontSize: 'clamp(42px, 8.5vw, 115px)' }}
         >
-          <span className="text-dm-white">WE EXIST AT THE</span>
+          <span className="text-dm-white">WE BUILD THE</span>
           <br />
-          <span className="text-dm-white">INTERSECTION OF</span>
+          <span className="text-dm-white">MOMENTS PEOPLE</span>
           <br />
-          <span className="text-dm-secondary">SPORT &amp; STORY.</span>
+          <span className="text-dm-secondary">CAN&apos;T FORGET.</span>
         </motion.h2>
 
         {/* Horizontal rule */}
@@ -100,9 +100,9 @@ export default function Manifesto() {
           transition={{ duration: 0.9, delay: 0.55 }}
           className="font-body font-light text-dm-secondary text-base md:text-lg leading-relaxed max-w-2xl mx-auto"
         >
-          Every athlete has a story that deserves to be told well. We bring the visual
-          language of cinema to the world of outdoor sports — crafting media that moves,
-          inspires, and endures long after the moment has passed.
+          Every brand has a story worth experiencing. We design, produce, and capture
+          events and activations that create genuine connection — then build the media
+          that ensures those moments keep working long after the crowd has gone home.
         </motion.p>
 
         {/* Attribution */}

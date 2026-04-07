@@ -60,7 +60,7 @@ export default function Hero() {
           transition={{ duration: 0.9, delay: 0.3, ease: 'easeOut' }}
           className="font-body text-[10px] tracking-[0.45em] text-dm-muted uppercase mb-5"
         >
-          Outdoor &nbsp;·&nbsp; Sports &nbsp;·&nbsp; Adventure
+          Experiential Marketing &nbsp;·&nbsp; Events &nbsp;·&nbsp; Brand
         </motion.p>
 
         {/* Headline */}
@@ -98,9 +98,9 @@ export default function Hero() {
           transition={{ duration: 1.2, delay: 1.1 }}
           className="font-body font-light text-dm-secondary mt-7 max-w-sm md:max-w-md text-sm md:text-base tracking-wide leading-relaxed"
         >
-          We don&apos;t just document the moment.
+          We build experiences people feel
           <br />
-          We build the visual identity of your sport.
+          long after the moment has passed.
         </motion.p>
 
         {/* CTA row */}
