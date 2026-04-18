@@ -15,7 +15,7 @@ interface Project {
   imageSrc?: string   // set once image is in /public/media/projects/
 }
 
-// LEFT column — 3 items
+// LEFT column — 4 items
 const LEFT: Project[] = [
   {
     id: '01',
@@ -41,18 +41,29 @@ const LEFT: Project[] = [
   },
   {
     id: '05',
-    title: 'Campaign',
-    subtitle: 'Brand Activation — Coming Soon',
-    category: 'Photo · Branding',
-    bgStyle: { background: 'linear-gradient(155deg, #090d0d 0%, #0e1515 55%, #070b0b 100%)' },
+    title: 'SportChek × HOKA',
+    subtitle: 'Brand Activation — In-Store Event',
+    category: 'Photo · Event',
+    bgStyle: { background: 'linear-gradient(155deg, #0d0c0a 0%, #161410 55%, #0a0908 100%)' },
     speed: 0.08,
     zIndex: 30,
     aspect: 'aspect-[4/3]',
-    // imageSrc: '/media/projects/05.jpg',  ← drop image here when ready
+    imageSrc: '/media/projects/05.jpg',
+  },
+  {
+    id: '07',
+    title: 'Fly Human Fly',
+    subtitle: 'HOKA Energy Session — Brand Activation',
+    category: 'Photo · Event',
+    bgStyle: { background: 'linear-gradient(145deg, #0d0c0a 0%, #161410 55%, #0a0908 100%)' },
+    speed: 0.14,
+    zIndex: 50,
+    aspect: 'aspect-[4/3]',
+    imageSrc: '/media/projects/07.jpg',
   },
 ]
 
-// RIGHT column — 3 items
+// RIGHT column — 4 items
 const RIGHT: Project[] = [
   {
     id: '02',
@@ -67,14 +78,14 @@ const RIGHT: Project[] = [
   },
   {
     id: '04',
-    title: 'Activation',
-    subtitle: 'Brand Event — Coming Soon',
-    category: 'Film',
-    bgStyle: { background: 'linear-gradient(145deg, #0f0f0e 0%, #181815 55%, #0b0b0a 100%)' },
+    title: 'Fly Human Fly',
+    subtitle: 'SportChek × HOKA — Brand Activation',
+    category: 'Photo · Event',
+    bgStyle: { background: 'linear-gradient(145deg, #0d0c0a 0%, #161410 55%, #0a0908 100%)' },
     speed: 0.13,
     zIndex: 20,
     aspect: 'aspect-[4/3]',
-    // imageSrc: '/media/projects/04.jpg',  ← drop image here when ready
+    imageSrc: '/media/projects/04.jpg',
   },
   {
     id: '06',
@@ -86,6 +97,17 @@ const RIGHT: Project[] = [
     zIndex: 40,
     aspect: 'aspect-[3/4]',
     imageSrc: '/media/projects/06.jpg',
+  },
+  {
+    id: '08',
+    title: 'All Heart',
+    subtitle: 'Strength Competition — Event Coverage',
+    category: 'Photography',
+    bgStyle: { background: 'linear-gradient(155deg, #0c0c0e 0%, #141416 55%, #090909 100%)' },
+    speed: 0.11,
+    zIndex: 50,
+    aspect: 'aspect-[3/4]',
+    imageSrc: '/media/projects/08.jpg',
   },
 ]
 

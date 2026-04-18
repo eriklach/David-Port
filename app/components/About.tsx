@@ -1,5 +1,6 @@
 'use client'
 import { useRef } from 'react'
+import Image from 'next/image'
 import { motion, useInView } from 'framer-motion'
 
 const STATS = [
@@ -61,21 +62,15 @@ export default function About() {
               <span className="text-dm-secondary">MOMENT.</span>
             </h2>
 
-            {/* Placeholder image area */}
+            {/* About image */}
             <div className="mt-8 relative overflow-hidden aspect-[4/3]">
-              {/*
-                DROP IMAGE HERE:
-                <Image src="/media/about.jpg" alt="Draupnir Media in the field" fill className="object-cover" />
-              */}
-              <div
-                className="absolute inset-0"
-                style={{
-                  background: `linear-gradient(135deg, #141410 0%, #0f0f0d 50%, #0c0c0a 100%)`,
-                }}
+              <Image
+                src="/media/about.jpg"
+                alt="Draupnir Media — in the field"
+                fill
+                className="object-cover object-center"
+                sizes="(max-width: 1024px) 100vw, 50vw"
               />
-              <div className="absolute bottom-4 left-4 font-body text-[9px] tracking-[0.3em] text-dm-border uppercase">
-                [ Drop field photo here — about.jpg ]
-              </div>
             </div>
           </motion.div>
 
