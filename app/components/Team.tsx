@@ -19,7 +19,7 @@ const TEAM: TeamMember[] = [
     specialty: 'Photography · Strategy',
     bio: 'Building visual stories that move people. A decade in the field — on competition floors, event spaces, and everywhere in between. Every frame is intentional.',
     disciplines: ['Events', 'Combat Sports', 'Exp. Marketing', 'Brand'],
-    imageSrc: '/media/team/david.jpg',
+    imageSrc: '/media/team/david.jpeg',
   },
   {
     name: 'Field Crew',

@@ -65,7 +65,7 @@ export default function About() {
             {/* About image */}
             <div className="mt-8 relative overflow-hidden aspect-[4/3]">
               <Image
-                src="/media/about.jpg"
+                src="/media/about.jpeg"
                 alt="Draupnir Media — in the field"
                 fill
                 className="object-cover object-center"

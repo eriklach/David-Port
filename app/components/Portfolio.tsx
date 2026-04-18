@@ -26,7 +26,7 @@ const LEFT: Project[] = [
     speed: 0.10,
     zIndex: 10,
     aspect: 'aspect-[4/3]',
-    imageSrc: '/media/projects/01.jpg',
+    imageSrc: '/media/projects/01.jpeg',
   },
   {
     id: '03',
@@ -37,7 +37,7 @@ const LEFT: Project[] = [
     speed: 0.16,
     zIndex: 30,
     aspect: 'aspect-[3/4]',
-    imageSrc: '/media/projects/03.jpg',
+    imageSrc: '/media/projects/03.jpeg',
   },
   {
     id: '05',
@@ -48,7 +48,7 @@ const LEFT: Project[] = [
     speed: 0.08,
     zIndex: 30,
     aspect: 'aspect-[4/3]',
-    imageSrc: '/media/projects/05.jpg',
+    imageSrc: '/media/projects/05.jpeg',
   },
   {
     id: '07',
@@ -59,7 +59,7 @@ const LEFT: Project[] = [
     speed: 0.14,
     zIndex: 50,
     aspect: 'aspect-[4/3]',
-    imageSrc: '/media/projects/07.jpg',
+    imageSrc: '/media/projects/07.jpeg',
   },
 ]
 
@@ -74,7 +74,7 @@ const RIGHT: Project[] = [
     speed: 0.20,
     zIndex: 20,
     aspect: 'aspect-[2/3]',
-    imageSrc: '/media/projects/02.jpg',
+    imageSrc: '/media/projects/02.jpeg',
   },
   {
     id: '04',
@@ -85,7 +85,7 @@ const RIGHT: Project[] = [
     speed: 0.13,
     zIndex: 20,
     aspect: 'aspect-[4/3]',
-    imageSrc: '/media/projects/04.jpg',
+    imageSrc: '/media/projects/04.jpeg',
   },
   {
     id: '06',
@@ -96,7 +96,7 @@ const RIGHT: Project[] = [
     speed: 0.18,
     zIndex: 40,
     aspect: 'aspect-[3/4]',
-    imageSrc: '/media/projects/06.jpg',
+    imageSrc: '/media/projects/06.jpeg',
   },
   {
     id: '08',
@@ -107,7 +107,7 @@ const RIGHT: Project[] = [
     speed: 0.11,
     zIndex: 50,
     aspect: 'aspect-[3/4]',
-    imageSrc: '/media/projects/08.jpg',
+    imageSrc: '/media/projects/08.jpeg',
   },
 ]
 
