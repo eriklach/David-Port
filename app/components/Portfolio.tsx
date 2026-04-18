@@ -1,5 +1,6 @@
 'use client'
 import { useRef } from 'react'
+import Image from 'next/image'
 import { motion, useScroll, useTransform, useInView } from 'framer-motion'
 
 interface Project {
@@ -8,42 +9,46 @@ interface Project {
   subtitle: string
   category: string
   bgStyle: React.CSSProperties
-  speed: number   // inner parallax rate
-  zIndex: number  // stacking layer (weaves left/right columns over each other)
-  aspect: string  // tailwind aspect-ratio class
+  speed: number
+  zIndex: number
+  aspect: string
+  imageSrc?: string   // set once image is in /public/media/projects/
 }
 
 // LEFT column — 3 items
 const LEFT: Project[] = [
   {
     id: '01',
-    title: 'Peak Season',
-    subtitle: 'Brand Activation — BC Backcountry',
+    title: 'Kendo Nationals',
+    subtitle: 'Tournament Coverage — Event Photography',
     category: 'Photo · Video',
-    bgStyle: { background: 'linear-gradient(145deg, #0a0e1c 0%, #0d1326 60%, #07090f 100%)' },
+    bgStyle: { background: 'linear-gradient(145deg, #0d0d10 0%, #131318 60%, #090909 100%)' },
     speed: 0.10,
     zIndex: 10,
     aspect: 'aspect-[4/3]',
+    imageSrc: '/media/projects/01.jpg',
   },
   {
     id: '03',
-    title: 'Iron Circuit',
-    subtitle: 'Event Coverage — Combat Sports',
-    category: 'Photo · Video',
-    bgStyle: { background: 'linear-gradient(135deg, #120a09 0%, #1b100d 55%, #0c0807 100%)' },
+    title: 'Steel Mace',
+    subtitle: 'Athlete Content — Fitness Brand',
+    category: 'Photo · Branding',
+    bgStyle: { background: 'linear-gradient(135deg, #0f0f0f 0%, #181818 55%, #0a0a0a 100%)' },
     speed: 0.16,
     zIndex: 30,
     aspect: 'aspect-[3/4]',
+    imageSrc: '/media/projects/03.jpg',
   },
   {
     id: '05',
-    title: 'Above the Line',
-    subtitle: 'Experiential Campaign — Coastal Trail',
+    title: 'Campaign',
+    subtitle: 'Brand Activation — Coming Soon',
     category: 'Photo · Branding',
     bgStyle: { background: 'linear-gradient(155deg, #090d0d 0%, #0e1515 55%, #070b0b 100%)' },
     speed: 0.08,
     zIndex: 30,
     aspect: 'aspect-[4/3]',
+    // imageSrc: '/media/projects/05.jpg',  ← drop image here when ready
   },
 ]
 
@@ -51,33 +56,36 @@ const LEFT: Project[] = [
 const RIGHT: Project[] = [
   {
     id: '02',
-    title: 'Vertical',
-    subtitle: 'Sport Climbing Series — Squamish',
+    title: 'Iron Circuit',
+    subtitle: 'Fitness Event — Arena Coverage',
     category: 'Photography',
-    bgStyle: { background: 'linear-gradient(155deg, #0c1209 0%, #14190b 55%, #090c06 100%)' },
+    bgStyle: { background: 'linear-gradient(155deg, #0c0c0e 0%, #141416 55%, #090909 100%)' },
     speed: 0.20,
     zIndex: 20,
     aspect: 'aspect-[2/3]',
+    imageSrc: '/media/projects/02.jpg',
   },
   {
     id: '04',
-    title: 'Urban Flow',
-    subtitle: 'Experiential Documentary — Vancouver',
+    title: 'Activation',
+    subtitle: 'Brand Event — Coming Soon',
     category: 'Film',
     bgStyle: { background: 'linear-gradient(145deg, #0f0f0e 0%, #181815 55%, #0b0b0a 100%)' },
     speed: 0.13,
     zIndex: 20,
     aspect: 'aspect-[4/3]',
+    // imageSrc: '/media/projects/04.jpg',  ← drop image here when ready
   },
   {
     id: '06',
-    title: 'Threshold',
-    subtitle: 'Brand Event — 50k Race',
+    title: 'Kendo Open',
+    subtitle: 'Tournament Coverage — Action Photography',
     category: 'Photo · Video',
-    bgStyle: { background: 'linear-gradient(135deg, #0c100a 0%, #121a0f 55%, #090d07 100%)' },
+    bgStyle: { background: 'linear-gradient(135deg, #0d0d10 0%, #131318 55%, #090909 100%)' },
     speed: 0.18,
     zIndex: 40,
     aspect: 'aspect-[3/4]',
+    imageSrc: '/media/projects/06.jpg',
   },
 ]
 
@@ -122,10 +130,22 @@ function CollageCard({ project }: { project: Project }) {
         style={{ y: innerY }}
         className="absolute inset-0 scale-[1.4] will-change-transform"
       >
-        <div className="absolute inset-0" style={project.bgStyle} />
-        <div className="absolute bottom-3 left-3 font-body text-[8px] tracking-[0.3em] text-white/15 uppercase">
-          [ {project.id}.jpg ]
-        </div>
+        {project.imageSrc ? (
+          <Image
+            src={project.imageSrc}
+            alt={project.title}
+            fill
+            className="object-cover"
+            sizes="(max-width: 768px) 100vw, 60vw"
+          />
+        ) : (
+          <>
+            <div className="absolute inset-0" style={project.bgStyle} />
+            <div className="absolute bottom-3 left-3 font-body text-[8px] tracking-[0.3em] text-white/15 uppercase">
+              [ {project.id}.jpg — drop in /public/media/projects/ ]
+            </div>
+          </>
+        )}
       </motion.div>
 
       {/* Hover gradient */}

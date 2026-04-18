@@ -1,5 +1,6 @@
 'use client'
 import { useRef } from 'react'
+import Image from 'next/image'
 import { motion, useInView } from 'framer-motion'
 
 interface TeamMember {
@@ -8,6 +9,7 @@ interface TeamMember {
   specialty: string
   bio: string
   disciplines: string[]
+  imageSrc?: string
 }
 
 const TEAM: TeamMember[] = [
@@ -15,8 +17,9 @@ const TEAM: TeamMember[] = [
     name: 'David',
     role: 'Founder · Creative Director',
     specialty: 'Photography · Strategy',
-    bio: 'Building visual stories that move people. A decade in the field — on snowfields, climbing routes, and competition floors. Every frame is intentional.',
-    disciplines: ['Snowboarding', 'Climbing', 'Martial Arts', 'Trail Running'],
+    bio: 'Building visual stories that move people. A decade in the field — on competition floors, event spaces, and everywhere in between. Every frame is intentional.',
+    disciplines: ['Events', 'Combat Sports', 'Exp. Marketing', 'Brand'],
+    imageSrc: '/media/team/david.jpg',
   },
   {
     name: 'Field Crew',
@@ -55,24 +58,25 @@ function TeamCard({ member, index }: { member: TeamMember; index: number }) {
     >
       {/* Photo area */}
       <div className="relative aspect-[3/4] overflow-hidden">
-        {/*
-          DROP TEAM PHOTO HERE:
+        {member.imageSrc ? (
           <Image
-            src={`/media/team/${member.name.toLowerCase()}.jpg`}
+            src={member.imageSrc}
             alt={member.name}
             fill
             className="object-cover object-top transition-transform duration-700 ease-out group-hover:scale-105"
+            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
           />
-        */}
-        <div
-          className="absolute inset-0 transition-transform duration-700 ease-out group-hover:scale-105"
-          style={{ background: CARD_GRADIENTS[index % CARD_GRADIENTS.length] }}
-        />
-
-        {/* Placeholder label */}
-        <div className="absolute top-4 left-4 font-body text-[8px] tracking-[0.3em] text-dm-border uppercase z-10">
-          [ {member.name.toLowerCase()}.jpg ]
-        </div>
+        ) : (
+          <>
+            <div
+              className="absolute inset-0 transition-transform duration-700 ease-out group-hover:scale-105"
+              style={{ background: CARD_GRADIENTS[index % CARD_GRADIENTS.length] }}
+            />
+            <div className="absolute top-4 left-4 font-body text-[8px] tracking-[0.3em] text-dm-border uppercase z-10">
+              [ {member.name.toLowerCase()}.jpg ]
+            </div>
+          </>
+        )}
 
         {/* Hover info overlay */}
         <div className="absolute inset-0 bg-gradient-to-t from-dm-black via-dm-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-400" />
