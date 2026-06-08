@@ -1,0 +1,120 @@
+'use client'
+import { useRef } from 'react'
+import Image from 'next/image'
+import { motion, useInView } from 'framer-motion'
+
+const STATS = [
+  { value: '100%', label: 'Field-First' },
+  { value: '6',    label: 'Disciplines' },
+  { value: '∞',    label: 'Shots Fired' },
+]
+
+function StatCard({ value, label, index }: { value: string; label: string; index: number }) {
+  const ref    = useRef(null)
+  const inView = useInView(ref, { once: true, margin: '-80px' })
+  return (
+    <motion.div
+      ref={ref}
+      initial={{ opacity: 0, y: 24 }}
+      animate={inView ? { opacity: 1, y: 0 } : {}}
+      transition={{ duration: 0.7, delay: index * 0.12, ease: 'easeOut' }}
+      className="border border-dm-border p-6 md:p-8"
+    >
+      <p className="font-display text-5xl md:text-6xl tracking-wider text-dm-white leading-none mb-2">
+        {value}
+      </p>
+      <p className="font-body text-xs tracking-[0.3em] text-dm-muted uppercase">{label}</p>
+    </motion.div>
+  )
+}
+
+export default function About() {
+  const ref    = useRef(null)
+  const inView = useInView(ref, { once: true, margin: '-100px' })
+
+  return (
+    <section id="about" className="bg-dm-black py-24 md:py-36 lg:py-44 border-b border-dm-border">
+      <div className="max-w-screen-xl mx-auto px-6 lg:px-12">
+        {/* Top label row */}
+        <div className="flex items-center gap-4 mb-12 md:mb-16">
+          <span className="font-body text-[10px] tracking-[0.4em] text-dm-muted uppercase">
+            01 — Who We Are
+          </span>
+          <div className="flex-1 h-px bg-dm-border" />
+        </div>
+
+        {/* Two-column layout */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-start">
+          {/* Left: headline */}
+          <motion.div
+            ref={ref}
+            initial={{ opacity: 0, y: 32 }}
+            animate={inView ? { opacity: 1, y: 0 } : {}}
+            transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
+          >
+            <h2
+              className="font-display leading-[0.9] tracking-wider text-dm-white uppercase"
+              style={{ fontSize: 'clamp(48px, 8vw, 110px)' }}
+            >
+              BUILT FOR
+              <br />
+              THE&nbsp;
+              <span className="text-dm-secondary">MOMENT.</span>
+            </h2>
+
+            {/* About image */}
+            <div className="mt-8 relative overflow-hidden aspect-[4/3]">
+              <Image
+                src="/media/about.jpeg"
+                alt="Draupnir Media — in the field"
+                fill
+                className="object-cover object-center"
+                sizes="(max-width: 1024px) 100vw, 50vw"
+              />
+            </div>
+          </motion.div>
+
+          {/* Right: body text + stats */}
+          <div className="flex flex-col gap-8 lg:pt-16">
+            <motion.div
+              initial={{ opacity: 0, y: 24 }}
+              animate={inView ? { opacity: 1, y: 0 } : {}}
+              transition={{ duration: 0.9, delay: 0.2, ease: 'easeOut' }}
+            >
+              <p className="font-body font-light text-dm-secondary text-lg md:text-xl leading-relaxed mb-6">
+                Draupnir Media is a full-service experiential marketing and events
+                agency. We create the moments, then make sure the world sees them —
+                through photography, film, brand strategy, and digital presence.
+              </p>
+              <p className="font-body font-light text-dm-muted text-base leading-relaxed">
+                From large-scale brand activations to intimate event coverage, we
+                handle the full media stack. Strategy, production, post — all under
+                one roof, with a team that&apos;s been on the ground for every kind
+                of event imaginable.
+              </p>
+            </motion.div>
+
+            {/* Stats row */}
+            <div className="grid grid-cols-3 gap-3 md:gap-4 mt-4">
+              {STATS.map((s, i) => (
+                <StatCard key={s.label} {...s} index={i} />
+              ))}
+            </div>
+
+            {/* CTA link */}
+            <motion.a
+              href="#work"
+              initial={{ opacity: 0 }}
+              animate={inView ? { opacity: 1 } : {}}
+              transition={{ duration: 0.7, delay: 0.5 }}
+              className="self-start flex items-center gap-3 font-body text-xs tracking-[0.3em] text-dm-secondary hover:text-dm-white transition-colors duration-300 uppercase group mt-2"
+            >
+              <span>View Our Work</span>
+              <span className="block w-8 h-px bg-current transition-all duration-300 group-hover:w-12" />
+            </motion.a>
+          </div>
+        </div>
+      </div>
+    </section>
+  )
+}
