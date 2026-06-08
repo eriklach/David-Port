@@ -6,44 +6,32 @@ const SERVICES = [
   {
     num: '01',
     title: 'Photography',
-    desc:
-      'Editorial, event, and action photography built for impact. From golden-hour alpine shots to cage-side combat coverage — we capture what matters.',
+    desc: 'Editorial, event, and action coverage.',
     tags: ['Editorial', 'Events', 'Action', 'Campaign'],
   },
   {
     num: '02',
     title: 'Videography',
-    desc:
-      'Full-production video from concept to grade. Sport recaps, brand films, athlete profiles, social reels — we handle the whole pipeline.',
+    desc: 'Brand films, event recaps, social content.',
     tags: ['Brand Film', 'Sport Recap', 'Documentary', 'Social'],
   },
   {
     num: '03',
-    title: 'Web Design',
-    desc:
-      'High-performance sites that look as good as your work. Built for conversion, optimised for search — no templates, no compromises.',
-    tags: ['Portfolio', 'Brand Site', 'E-commerce', 'Landing'],
+    title: 'Editing',
+    desc: 'Colour grading, retouching, sound, cuts.',
+    tags: ['Colour Grade', 'Retouch', 'Cut', 'Sound'],
   },
   {
     num: '04',
     title: 'Branding',
-    desc:
-      'Visual identity for athletes, events, and brands entering the outdoor space. Logos, colour systems, type, and the full kit of assets.',
+    desc: 'Identity systems — logos, colour, type, assets.',
     tags: ['Identity', 'Logo', 'Style Guide', 'Assets'],
   },
   {
     num: '05',
-    title: 'Editing',
-    desc:
-      'Post-production that elevates raw footage and photos into finished, distribution-ready work. Colour grading, retouching, sound design.',
-    tags: ['Colour Grade', 'Retouch', 'Cut', 'Sound'],
-  },
-  {
-    num: '06',
-    title: 'Copywriting',
-    desc:
-      'Words that move as fast as the people we shoot. Campaign copy, athlete bios, press releases, social captions — all with voice.',
-    tags: ['Campaign', 'Social', 'Press', 'SEO'],
+    title: 'Web Design',
+    desc: 'High-performance sites built for conversion.',
+    tags: ['Portfolio', 'Brand Site', 'E-commerce', 'Landing'],
   },
 ]
 
