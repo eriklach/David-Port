@@ -4,7 +4,6 @@ import SizzleReel from './components/SizzleReel'
 import Marquee from './components/Marquee'
 import Portfolio from './components/Portfolio'
 import Services from './components/Services'
-import Manifesto from './components/Manifesto'
 import About from './components/About'
 import Team from './components/Team'
 import Contact from './components/Contact'
@@ -19,7 +18,6 @@ export default function Home() {
       <Marquee />
       <Portfolio />
       <Services />
-      <Manifesto />
       <About />
       <Team />
       <Contact />
