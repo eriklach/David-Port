@@ -5,9 +5,6 @@ import { motion, useScroll, useTransform, useInView } from 'framer-motion'
 
 interface Project {
   id: string
-  title: string
-  subtitle: string
-  category: string
   bgStyle: React.CSSProperties
   speed: number
   zIndex: number
@@ -15,72 +12,46 @@ interface Project {
   imageSrc?: string   // set once image is in /public/media/projects/
 }
 
-// LEFT column — 4 items
+// LEFT column — 4 items (heights balanced against RIGHT so columns end together)
 const LEFT: Project[] = [
   {
+    id: '02',
+    bgStyle: { background: 'linear-gradient(155deg, #0c0c0e 0%, #141416 55%, #090909 100%)' },
+    speed: 0.20,
+    zIndex: 10,
+    aspect: 'aspect-[2/3]',
+    imageSrc: '/media/projects/02.jpeg',
+  },
+  {
     id: '01',
-    title: 'Kendo Nationals',
-    subtitle: 'Tournament Coverage — Event Photography',
-    category: 'Photo · Video',
     bgStyle: { background: 'linear-gradient(145deg, #0d0d10 0%, #131318 60%, #090909 100%)' },
     speed: 0.10,
-    zIndex: 10,
+    zIndex: 40,
     aspect: 'aspect-[4/3]',
     imageSrc: '/media/projects/01.jpeg',
   },
   {
     id: '03',
-    title: 'Steel Mace',
-    subtitle: 'Athlete Content — Fitness Brand',
-    category: 'Photo · Branding',
     bgStyle: { background: 'linear-gradient(135deg, #0f0f0f 0%, #181818 55%, #0a0a0a 100%)' },
     speed: 0.16,
-    zIndex: 30,
+    zIndex: 50,
     aspect: 'aspect-[3/4]',
     imageSrc: '/media/projects/03.jpeg',
   },
   {
     id: '05',
-    title: 'SportChek × HOKA',
-    subtitle: 'Brand Activation — In-Store Event',
-    category: 'Photo · Event',
     bgStyle: { background: 'linear-gradient(155deg, #0d0c0a 0%, #161410 55%, #0a0908 100%)' },
     speed: 0.08,
-    zIndex: 30,
+    zIndex: 80,
     aspect: 'aspect-[4/3]',
     imageSrc: '/media/projects/05.jpeg',
-  },
-  {
-    id: '07',
-    title: 'Fly Human Fly',
-    subtitle: 'HOKA Energy Session — Brand Activation',
-    category: 'Photo · Event',
-    bgStyle: { background: 'linear-gradient(145deg, #0d0c0a 0%, #161410 55%, #0a0908 100%)' },
-    speed: 0.14,
-    zIndex: 50,
-    aspect: 'aspect-[4/3]',
-    imageSrc: '/media/projects/07.jpeg',
   },
 ]
 
 // RIGHT column — 4 items
 const RIGHT: Project[] = [
   {
-    id: '02',
-    title: 'Iron Circuit',
-    subtitle: 'Fitness Event — Arena Coverage',
-    category: 'Photography',
-    bgStyle: { background: 'linear-gradient(155deg, #0c0c0e 0%, #141416 55%, #090909 100%)' },
-    speed: 0.20,
-    zIndex: 20,
-    aspect: 'aspect-[2/3]',
-    imageSrc: '/media/projects/02.jpeg',
-  },
-  {
     id: '04',
-    title: 'Fly Human Fly',
-    subtitle: 'SportChek × HOKA — Brand Activation',
-    category: 'Photo · Event',
     bgStyle: { background: 'linear-gradient(145deg, #0d0c0a 0%, #161410 55%, #0a0908 100%)' },
     speed: 0.13,
     zIndex: 20,
@@ -89,23 +60,25 @@ const RIGHT: Project[] = [
   },
   {
     id: '06',
-    title: 'Kendo Open',
-    subtitle: 'Tournament Coverage — Action Photography',
-    category: 'Photo · Video',
     bgStyle: { background: 'linear-gradient(135deg, #0d0d10 0%, #131318 55%, #090909 100%)' },
     speed: 0.18,
-    zIndex: 40,
+    zIndex: 30,
     aspect: 'aspect-[3/4]',
     imageSrc: '/media/projects/06.jpeg',
   },
   {
+    id: '07',
+    bgStyle: { background: 'linear-gradient(145deg, #0d0c0a 0%, #161410 55%, #0a0908 100%)' },
+    speed: 0.14,
+    zIndex: 60,
+    aspect: 'aspect-[4/3]',
+    imageSrc: '/media/projects/07.jpeg',
+  },
+  {
     id: '08',
-    title: 'All Heart',
-    subtitle: 'Strength Competition — Event Coverage',
-    category: 'Photography',
     bgStyle: { background: 'linear-gradient(155deg, #0c0c0e 0%, #141416 55%, #090909 100%)' },
     speed: 0.11,
-    zIndex: 50,
+    zIndex: 70,
     aspect: 'aspect-[3/4]',
     imageSrc: '/media/projects/08.jpeg',
   },
@@ -128,25 +101,9 @@ function CollageCard({ project }: { project: Project }) {
   return (
     <div
       ref={ref}
-      className={`relative overflow-hidden group cursor-pointer ${project.aspect}`}
+      className={`relative overflow-hidden cursor-pointer ${project.aspect}`}
       style={{ zIndex: project.zIndex }}
     >
-      {/*
-        ── DROP YOUR REAL IMAGE/VIDEO HERE ──────────────────────────────────
-        <Image
-          src={`/media/projects/${project.id}.jpg`}
-          alt={project.title}
-          fill
-          className="object-cover"
-          sizes="60vw"
-        />
-        Or for video:
-        <video autoPlay muted loop playsInline
-          src={`/media/projects/${project.id}.mp4`}
-          className="absolute inset-0 w-full h-full object-cover"
-        />
-      */}
-
       {/* Inner parallaxing layer — scaled so edges never show */}
       <motion.div
         style={{ y: innerY }}
@@ -155,7 +112,7 @@ function CollageCard({ project }: { project: Project }) {
         {project.imageSrc ? (
           <Image
             src={project.imageSrc}
-            alt={project.title}
+            alt=""
             fill
             className="object-cover"
             sizes="(max-width: 768px) 100vw, 60vw"
@@ -169,25 +126,6 @@ function CollageCard({ project }: { project: Project }) {
           </>
         )}
       </motion.div>
-
-      {/* Hover gradient */}
-      <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/15 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-
-      {/* Info — slides up on hover */}
-      <div className="absolute bottom-0 left-0 right-0 p-5 md:p-6 translate-y-3 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-500 ease-out">
-        <span className="block font-body text-[8px] tracking-[0.38em] text-white/55 uppercase mb-1.5">
-          {project.category}
-        </span>
-        <h3
-          className="font-display tracking-wider text-white uppercase leading-none mb-1"
-          style={{ fontSize: 'clamp(18px, 2.5vw, 36px)' }}
-        >
-          {project.title}
-        </h3>
-        <p className="font-body font-light text-white/45 text-xs tracking-wide">
-          {project.subtitle}
-        </p>
-      </div>
     </div>
   )
 }
