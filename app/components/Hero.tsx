@@ -1,5 +1,6 @@
 'use client'
 import { useRef } from 'react'
+import Image from 'next/image'
 import { motion, useScroll, useTransform } from 'framer-motion'
 
 export default function Hero() {
@@ -20,33 +21,23 @@ export default function Hero() {
       id="hero"
       className="relative h-[100svh] min-h-[640px] overflow-hidden bg-dm-black"
     >
-      {/* ── Background (video or image drops here) ── */}
+      {/* ── Background image ── */}
       <motion.div style={{ y: bgY }} className="absolute inset-0 scale-[1.12]">
-        {/*
-          DROP YOUR HERO VIDEO HERE:
-          <video
-            autoPlay muted loop playsInline
-            className="absolute inset-0 w-full h-full object-cover"
-            src="/media/hero.mp4"
-            poster="/media/hero-poster.jpg"
-          />
-        */}
-        {/* Placeholder cinematic gradient */}
-        <div className="video-placeholder absolute inset-0" />
-        <div
-          className="absolute inset-0 opacity-30"
-          style={{
-            backgroundImage: `
-              radial-gradient(ellipse 80% 60% at 25% 35%, #1d1d18 0%, transparent 65%),
-              radial-gradient(ellipse 60% 70% at 75% 65%, #181818 0%, transparent 55%)
-            `,
-          }}
+        <Image
+          src="/media/hero.jpeg"
+          alt="Draupnir Media — crowd at a Fly Human Fly street activation"
+          fill
+          priority
+          className="object-cover"
+          sizes="100vw"
         />
       </motion.div>
 
-      {/* Dark gradient overlays — bottom-heavy for text legibility */}
-      <div className="absolute inset-0 bg-gradient-to-t from-dm-black via-dm-black/25 to-transparent pointer-events-none" />
-      <div className="absolute inset-0 bg-gradient-to-b from-dm-black/55 via-transparent to-transparent pointer-events-none" />
+      {/* Dark overlays + blur — keep the headline legible over a busy photo */}
+      <div className="absolute inset-0 backdrop-blur-[2px] bg-dm-black/45 pointer-events-none" />
+      <div className="absolute inset-0 bg-gradient-to-t from-dm-black via-dm-black/40 to-dm-black/10 pointer-events-none" />
+      <div className="absolute inset-0 bg-gradient-to-b from-dm-black/70 via-transparent to-transparent pointer-events-none" />
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_60%_55%_at_50%_45%,rgba(0,0,0,0.55)_0%,transparent_70%)] pointer-events-none" />
 
       {/* ── Main content ── */}
       <motion.div
@@ -90,18 +81,6 @@ export default function Hero() {
         >
           MEDIA
         </motion.h2>
-
-        {/* Tagline */}
-        <motion.p
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 1.2, delay: 1.1 }}
-          className="font-body font-light text-dm-secondary mt-7 max-w-sm md:max-w-md text-sm md:text-base tracking-wide leading-relaxed"
-        >
-          We build experiences people feel
-          <br />
-          long after the moment has passed.
-        </motion.p>
 
         {/* CTA row */}
         <motion.div
