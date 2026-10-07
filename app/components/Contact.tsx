@@ -3,7 +3,7 @@ import { useRef } from 'react'
 import { motion, useInView } from 'framer-motion'
 
 // ─── Contact details — edit these to change where enquiries go ────────────
-const CONTACT_EMAIL = 'hello@draupnirmedia.com'
+const CONTACT_EMAIL = 'david@draupnir.media'
 const INSTAGRAM_URL = 'https://www.instagram.com/draupnir.media/'
 const LOCATION      = 'Toronto, Canada — Available Worldwide'
 
