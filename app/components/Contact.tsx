@@ -5,10 +5,9 @@ import { motion, useInView } from 'framer-motion'
 const SERVICES_OPTIONS = [
   'Photography',
   'Videography',
-  'Web Design',
-  'Branding',
   'Editing',
-  'Copywriting',
+  'Branding',
+  'Web Design',
   'Full Package',
 ]
 
@@ -36,7 +35,7 @@ export default function Contact() {
         {/* Hero text */}
         <div className="mb-16 md:mb-20">
           <span className="block font-body text-[10px] tracking-[0.4em] text-dm-muted uppercase mb-4">
-            05 — Let&apos;s Go
+            05 — Contact
           </span>
           <motion.h2
             ref={ref}
@@ -48,7 +47,7 @@ export default function Contact() {
           >
             LET&apos;S
             <br />
-            <span className="text-dm-secondary">CREATE.</span>
+            <span className="text-dm-secondary">CREATE</span>
           </motion.h2>
         </div>
 
@@ -61,8 +60,7 @@ export default function Contact() {
             className="flex flex-col gap-8"
           >
             <p className="font-body font-light text-dm-secondary text-base md:text-lg leading-relaxed max-w-md">
-              Whether you&apos;re launching a brand, covering an event, or building your
-              athlete presence — we want to hear about it. Tell us what you need and
+              Launching a brand? Covering an event? Tell us what you need and
               we&apos;ll build something worth watching.
             </p>
 
@@ -83,7 +81,7 @@ export default function Contact() {
                   Based In
                 </p>
                 <p className="font-body text-dm-secondary text-sm tracking-wide">
-                  British Columbia, Canada — Available Worldwide
+                  Toronto, Canada — Available Worldwide
                 </p>
               </div>
             </div>
@@ -94,15 +92,14 @@ export default function Contact() {
                 Follow
               </p>
               <div className="flex gap-5">
-                {['Instagram', 'Vimeo', 'LinkedIn'].map((s) => (
-                  <a
-                    key={s}
-                    href="#"
-                    className="font-body text-xs tracking-[0.22em] text-dm-secondary hover:text-dm-white transition-colors duration-200 uppercase"
-                  >
-                    {s}
-                  </a>
-                ))}
+                <a
+                  href="https://www.instagram.com/draupnir.media/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="font-body text-xs tracking-[0.22em] text-dm-secondary hover:text-dm-white transition-colors duration-200 uppercase"
+                >
+                  Instagram
+                </a>
               </div>
             </div>
           </motion.div>
@@ -134,7 +131,7 @@ export default function Contact() {
                       type="text"
                       required
                       placeholder="Your name"
-                      className="bg-transparent border border-dm-border text-dm-primary font-body text-sm px-4 py-3 placeholder:text-dm-border focus:outline-none focus:border-dm-secondary transition-colors duration-200"
+                      className="bg-transparent border border-dm-border text-dm-primary font-body text-sm px-4 py-3 placeholder:text-dm-muted focus:outline-none focus:border-dm-secondary transition-colors duration-200"
                     />
                   </label>
                   <label className="flex flex-col gap-2">
@@ -145,7 +142,7 @@ export default function Contact() {
                       type="email"
                       required
                       placeholder="you@example.com"
-                      className="bg-transparent border border-dm-border text-dm-primary font-body text-sm px-4 py-3 placeholder:text-dm-border focus:outline-none focus:border-dm-secondary transition-colors duration-200"
+                      className="bg-transparent border border-dm-border text-dm-primary font-body text-sm px-4 py-3 placeholder:text-dm-muted focus:outline-none focus:border-dm-secondary transition-colors duration-200"
                     />
                   </label>
                 </div>
@@ -181,7 +178,7 @@ export default function Contact() {
                   <textarea
                     rows={5}
                     placeholder="What are you building? What does success look like?"
-                    className="bg-transparent border border-dm-border text-dm-primary font-body text-sm px-4 py-3 placeholder:text-dm-border focus:outline-none focus:border-dm-secondary transition-colors duration-200 resize-none"
+                    className="bg-transparent border border-dm-border text-dm-primary font-body text-sm px-4 py-3 placeholder:text-dm-muted focus:outline-none focus:border-dm-secondary transition-colors duration-200 resize-none"
                   />
                 </label>
 

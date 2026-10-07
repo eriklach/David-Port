@@ -4,9 +4,9 @@ import Image from 'next/image'
 import { motion, useInView } from 'framer-motion'
 
 const STATS = [
-  { value: '100%', label: 'Field-First' },
-  { value: '6',    label: 'Disciplines' },
-  { value: '∞',    label: 'Shots Fired' },
+  { value: '20+', label: 'Events Covered' },
+  { value: '5',   label: 'Disciplines' },
+  { value: '∞',   label: 'Shots Fired' },
 ]
 
 function StatCard({ value, label, index }: { value: string; label: string; index: number }) {
@@ -38,7 +38,7 @@ export default function About() {
         {/* Top label row */}
         <div className="flex items-center gap-4 mb-12 md:mb-16">
           <span className="font-body text-[10px] tracking-[0.4em] text-dm-muted uppercase">
-            01 — Who We Are
+            03 — About Us
           </span>
           <div className="flex-1 h-px bg-dm-border" />
         </div>
@@ -81,16 +81,10 @@ export default function About() {
               animate={inView ? { opacity: 1, y: 0 } : {}}
               transition={{ duration: 0.9, delay: 0.2, ease: 'easeOut' }}
             >
-              <p className="font-body font-light text-dm-secondary text-lg md:text-xl leading-relaxed mb-6">
+              <p className="font-body font-light text-dm-secondary text-lg md:text-xl leading-relaxed">
                 Draupnir Media is a full-service experiential marketing and events
-                agency. We create the moments, then make sure the world sees them —
-                through photography, film, brand strategy, and digital presence.
-              </p>
-              <p className="font-body font-light text-dm-muted text-base leading-relaxed">
-                From large-scale brand activations to intimate event coverage, we
-                handle the full media stack. Strategy, production, post — all under
-                one roof, with a team that&apos;s been on the ground for every kind
-                of event imaginable.
+                agency. From large-scale brand activations to intimate event coverage,
+                we handle the full media stack. Strategy, production, and post.
               </p>
             </motion.div>
 

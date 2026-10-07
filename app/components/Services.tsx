@@ -31,7 +31,7 @@ const SERVICES = [
     num: '05',
     title: 'Web Design',
     desc: 'High-performance sites built for conversion.',
-    tags: ['Portfolio', 'Brand Site', 'E-commerce', 'Landing'],
+    tags: ['Landing Pages', 'Brand Site', 'E-commerce', 'Portfolios'],
   },
 ]
 
@@ -52,7 +52,7 @@ function ServiceRow({
       className="group grid grid-cols-[3rem_1fr] md:grid-cols-[4rem_1fr_auto] gap-4 md:gap-8 items-start py-8 md:py-10 border-b border-dm-border hover:bg-dm-surface/30 transition-colors duration-300 px-2 md:px-4 cursor-default"
     >
       {/* Number */}
-      <span className="font-display text-dm-border text-xl tracking-widest pt-1 group-hover:text-dm-muted transition-colors duration-300">
+      <span className="font-display text-dm-muted text-xl tracking-widest pt-1 group-hover:text-dm-secondary transition-colors duration-300">
         {num}
       </span>
 
@@ -74,7 +74,7 @@ function ServiceRow({
         {tags.map((tag) => (
           <span
             key={tag}
-            className="font-body text-[9px] tracking-[0.25em] text-dm-border uppercase group-hover:text-dm-muted transition-colors duration-300"
+            className="font-body text-[9px] tracking-[0.25em] text-dm-muted uppercase group-hover:text-dm-secondary transition-colors duration-300"
           >
             {tag}
           </span>
@@ -109,7 +109,7 @@ export default function Services() {
             </motion.h2>
           </div>
           <p className="hidden md:block font-body font-light text-dm-muted text-sm max-w-xs text-right leading-relaxed">
-            A full toolkit for outdoor and sports media — from lens to launch.
+            A full toolkit for brand activations, outdoor, and sports media.
           </p>
         </div>
 

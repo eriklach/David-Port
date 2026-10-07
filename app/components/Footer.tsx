@@ -15,9 +15,7 @@ const FOOTER_LINKS = [
 ]
 
 const SOCIAL_LINKS = [
-  { label: 'Instagram', href: '#' },
-  { label: 'Vimeo',     href: '#' },
-  { label: 'LinkedIn',  href: '#' },
+  { label: 'Instagram', href: 'https://www.instagram.com/draupnir.media/' },
 ]
 
 export default function Footer() {
@@ -55,6 +53,8 @@ export default function Footer() {
                 key={label}
                 href={href}
                 aria-label={label}
+                target="_blank"
+                rel="noopener noreferrer"
                 className="font-body text-xs tracking-[0.2em] text-dm-muted hover:text-dm-white transition-colors duration-200 uppercase"
               >
                 {label}
@@ -65,11 +65,11 @@ export default function Footer() {
 
         {/* Bottom row */}
         <div className="pt-8 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-          <p className="font-body text-[10px] tracking-[0.28em] text-dm-border uppercase">
+          <p className="font-body text-[10px] tracking-[0.28em] text-dm-muted uppercase">
             © {new Date().getFullYear()} Draupnir Media. All rights reserved.
           </p>
-          <p className="font-body text-[10px] tracking-[0.24em] text-dm-border uppercase">
-            BC, Canada &nbsp;·&nbsp; Available Worldwide
+          <p className="font-body text-[10px] tracking-[0.24em] text-dm-muted uppercase">
+            Toronto, Canada &nbsp;·&nbsp; Available Worldwide
           </p>
         </div>
       </div>
