@@ -6,7 +6,7 @@ import { motion, useInView } from 'framer-motion'
 interface TeamMember {
   name: string
   role: string
-  specialty: string
+  specialty?: string
   bio: string
   disciplines: string[]
   imageSrc?: string
@@ -16,25 +16,24 @@ const TEAM: TeamMember[] = [
   {
     name: 'David',
     role: 'Founder · Creative Director',
-    specialty: 'Photography · Strategy',
-    bio: 'Building visual stories that move people. A decade in the field — on competition floors, event spaces, and everywhere in between. Every frame is intentional.',
+    specialty: 'Photographer',
+    bio: 'Building visual stories that move people. A decade in the field — on competition floors, event spaces, and everywhere in between.',
     disciplines: ['Events', 'Combat Sports', 'Exp. Marketing', 'Brand'],
     imageSrc: '/media/team/david.jpg',
   },
   {
     name: 'Rich',
-    role: 'Lead Videographer',
-    specialty: 'Cinematography · Grade',
+    role: 'Videographer',
     bio: 'From handheld grit to smooth cinematic lines, covering every environment from summit to ring.',
     disciplines: ['Film', 'Drone', 'Grade', 'Sound'],
     imageSrc: '/media/team/rich.jpg',
   },
   {
     name: 'Erik',
-    role: 'Design & Web',
+    role: 'Web Design',
     specialty: 'Branding · Development',
     bio: 'Identity, digital, and everything in between. Where the visual language of an athlete or brand gets built out into a full system.',
-    disciplines: ['Identity', 'Web', 'Print', 'Motion'],
+    disciplines: ['Web Design', 'Brand Identity', 'Product Design'],
     imageSrc: '/media/team/erik.jpg',
   },
 ]
@@ -56,7 +55,7 @@ function TeamCard({ member, index }: { member: TeamMember; index: number }) {
       initial={{ opacity: 0, y: 32 }}
       animate={inView ? { opacity: 1, y: 0 } : {}}
       transition={{ duration: 0.8, delay: index * 0.15, ease: [0.16, 1, 0.3, 1] }}
-      className="group relative overflow-hidden border border-dm-border hover:border-dm-secondary/40 transition-colors duration-500 cursor-default"
+      className="group relative flex flex-col overflow-hidden border border-dm-border hover:border-dm-secondary/40 transition-colors duration-500 cursor-default"
     >
       {/* Photo area */}
       <div className="relative aspect-[3/4] overflow-hidden">
@@ -101,16 +100,18 @@ function TeamCard({ member, index }: { member: TeamMember; index: number }) {
       </div>
 
       {/* Name plate */}
-      <div className="p-5 md:p-6 bg-dm-surface border-t border-dm-border">
+      <div className="flex-1 p-5 md:p-6 bg-dm-surface border-t border-dm-border">
         <h3 className="font-display text-2xl md:text-3xl tracking-wider text-dm-white uppercase leading-none mb-1">
           {member.name}
         </h3>
         <p className="font-body text-[10px] tracking-[0.28em] text-dm-muted uppercase mb-0.5">
           {member.role}
         </p>
-        <p className="font-body text-[10px] tracking-[0.22em] text-dm-border uppercase">
-          {member.specialty}
-        </p>
+        {member.specialty && (
+          <p className="font-body text-[10px] tracking-[0.22em] text-dm-muted uppercase">
+            {member.specialty}
+          </p>
+        )}
       </div>
     </motion.div>
   )
@@ -127,7 +128,7 @@ export default function Team() {
         <div className="flex items-end justify-between flex-wrap gap-6 mb-12 md:mb-16">
           <div>
             <span className="block font-body text-[10px] tracking-[0.4em] text-dm-muted uppercase mb-4">
-              04 — The People
+              04 — Who We Are
             </span>
             <motion.h2
               ref={ref}
@@ -141,7 +142,7 @@ export default function Team() {
             </motion.h2>
           </div>
           <p className="hidden md:block font-body font-light text-dm-muted text-sm max-w-xs text-right leading-relaxed">
-            We live the sports we shoot. That&apos;s not a tagline — it&apos;s our hiring criteria.
+            We live the sports we shoot.
           </p>
         </div>
 
@@ -151,19 +152,6 @@ export default function Team() {
             <TeamCard key={member.name} member={member} index={i} />
           ))}
         </div>
-
-        {/* Join note */}
-        <motion.p
-          initial={{ opacity: 0 }}
-          animate={inView ? { opacity: 1 } : {}}
-          transition={{ duration: 0.7, delay: 0.6 }}
-          className="mt-10 font-body text-xs tracking-[0.25em] text-dm-border text-center uppercase"
-        >
-          Interested in joining the crew?&nbsp;
-          <a href="#contact" className="text-dm-muted hover:text-dm-secondary transition-colors duration-200 underline underline-offset-4 decoration-dm-border">
-            Get in touch.
-          </a>
-        </motion.p>
       </div>
     </section>
   )

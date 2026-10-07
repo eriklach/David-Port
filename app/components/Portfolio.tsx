@@ -7,40 +7,38 @@ import { motion, useScroll, useTransform, useInView } from 'framer-motion'
 // Distributed across columns in reading order: i % 3 → column.
 const IMAGES = [
   'hoka/HokaxGoodwood-22.jpg',
-  'ugg/UGGSeasonEdits-5.jpg',
+  'ugg/UGGSeasonEdits-10.jpg',
   'sportcheck/PUMAxSportChek-8.jpg',
   'steamwhistle/SWxTrinity-7-7.jpg',
   'volvo/VolvoxIDS-08.jpg',
   'hoka/HokaxGoodwood-25.jpg',
-  'ugg/UGGSeasonEdits-10.jpg',
-  'sportcheck/PUMAxSportChek-9.jpg',
-  'steamwhistle/SWxTrinity-7-24.jpg',
+  '06.jpeg',
+  'ugg/UGGSeasonEdits-11.jpg',
   'volvo/VolvoxIDS-18.jpg',
   'hoka/HokaxGoodwood-34.jpg',
-  'ugg/UGGSeasonEdits-11.jpg',
   'sportcheck/PUMAxSportChek-10.jpg',
+  'ugg/UGGSeasonEdits-19.jpg',
   'steamwhistle/SWxTrinity-7-31.jpg',
   'hoka/HokaxGoodwood-35.jpg',
-  'ugg/UGGSeasonEdits-19.jpg',
-  'hoka/HokaxGoodwood-41.jpg',
   'ugg/UGGSeasonEdits-30.jpg',
-  'hoka/HokaxGoodwood-46.jpg',
+  'hoka/HokaxGoodwood-41.jpg',
   'ugg/UGGSeasonEdits-34.jpg',
-  'hoka/HokaxGoodwood-49.jpg',
+  'hoka/HokaxGoodwood-46.jpg',
   'ugg/UGGSeasonEdits-36.jpg',
+  'hoka/HokaxGoodwood-49.jpg',
 ]
 
 // Card crops per column. All sources are 2:3 portrait; mixing in 4:5 crops
 // adds rhythm while keeping column heights equal (in card widths, w):
-//   col 1: 4×1.5w + 4×1.25w          = 11w
-//   col 2: 7×1.5w          + 0.5w top = 11w
-//   col 3: 5×1.5w + 2×1.25w + 1w top  = 11w
+//   col 1: 5×1.5w + 2×1.25w          = 10w
+//   col 2: 3×1.5w + 4×1.25w + 0.5w top = 10w
+//   col 3: 6×1.5w          + 1w top   = 10w
 const TALL  = 'aspect-[2/3]'
 const SHORT = 'aspect-[4/5]'
 const COLUMN_ASPECTS = [
-  [TALL, SHORT, TALL, SHORT, TALL, SHORT, TALL, SHORT],
-  [TALL, TALL, TALL, TALL, TALL, TALL, TALL],
   [TALL, TALL, SHORT, TALL, TALL, SHORT, TALL],
+  [SHORT, TALL, SHORT, TALL, SHORT, TALL, SHORT],
+  [TALL, TALL, TALL, TALL, TALL, TALL],
 ]
 // Top offsets as % of section width (padding % resolves against width), = 0 / 0.5w / 1w
 const COLUMN_OFFSETS = ['0%', '20%', '40%']
@@ -128,7 +126,7 @@ export default function Portfolio() {
             </motion.h2>
           </div>
           <p className="hidden md:block font-body font-light text-dm-muted text-sm max-w-xs text-right leading-relaxed">
-            Experiences, events, and brand activations — captured and crafted.
+            Experiences, events, and brand activations.
           </p>
         </div>
       </div>
