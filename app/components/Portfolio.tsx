@@ -3,86 +3,66 @@ import { useRef } from 'react'
 import Image from 'next/image'
 import { motion, useScroll, useTransform, useInView } from 'framer-motion'
 
+// Ordered so neighbouring images come from different shoots.
+// Distributed across columns in reading order: i % 3 → column.
+const IMAGES = [
+  'hoka/HokaxGoodwood-22.jpg',
+  'ugg/UGGSeasonEdits-5.jpg',
+  'sportcheck/PUMAxSportChek-8.jpg',
+  'steamwhistle/SWxTrinity-7-7.jpg',
+  'volvo/VolvoxIDS-08.jpg',
+  'hoka/HokaxGoodwood-25.jpg',
+  'ugg/UGGSeasonEdits-10.jpg',
+  'sportcheck/PUMAxSportChek-9.jpg',
+  'steamwhistle/SWxTrinity-7-24.jpg',
+  'volvo/VolvoxIDS-18.jpg',
+  'hoka/HokaxGoodwood-34.jpg',
+  'ugg/UGGSeasonEdits-11.jpg',
+  'sportcheck/PUMAxSportChek-10.jpg',
+  'steamwhistle/SWxTrinity-7-31.jpg',
+  'hoka/HokaxGoodwood-35.jpg',
+  'ugg/UGGSeasonEdits-19.jpg',
+  'hoka/HokaxGoodwood-41.jpg',
+  'ugg/UGGSeasonEdits-30.jpg',
+  'hoka/HokaxGoodwood-46.jpg',
+  'ugg/UGGSeasonEdits-34.jpg',
+  'hoka/HokaxGoodwood-49.jpg',
+  'ugg/UGGSeasonEdits-36.jpg',
+]
+
+// Card crops per column. All sources are 2:3 portrait; mixing in 4:5 crops
+// adds rhythm while keeping column heights equal (in card widths, w):
+//   col 1: 4×1.5w + 4×1.25w          = 11w
+//   col 2: 7×1.5w          + 0.5w top = 11w
+//   col 3: 5×1.5w + 2×1.25w + 1w top  = 11w
+const TALL  = 'aspect-[2/3]'
+const SHORT = 'aspect-[4/5]'
+const COLUMN_ASPECTS = [
+  [TALL, SHORT, TALL, SHORT, TALL, SHORT, TALL, SHORT],
+  [TALL, TALL, TALL, TALL, TALL, TALL, TALL],
+  [TALL, TALL, SHORT, TALL, TALL, SHORT, TALL],
+]
+// Top offsets as % of section width (padding % resolves against width), = 0 / 0.5w / 1w
+const COLUMN_OFFSETS = ['0%', '20%', '40%']
+const SPEEDS = [0.10, 0.16, 0.08, 0.14, 0.12, 0.18, 0.07]
+
 interface Project {
-  id: string
-  bgStyle: React.CSSProperties
+  src: string
   speed: number
   zIndex: number
   aspect: string
-  imageSrc?: string   // set once image is in /public/media/projects/
 }
 
-// LEFT column — 4 items (heights balanced against RIGHT so columns end together)
-const LEFT: Project[] = [
-  {
-    id: '02',
-    bgStyle: { background: 'linear-gradient(155deg, #0c0c0e 0%, #141416 55%, #090909 100%)' },
-    speed: 0.20,
-    zIndex: 10,
-    aspect: 'aspect-[2/3]',
-    imageSrc: '/media/projects/02.jpeg',
-  },
-  {
-    id: '01',
-    bgStyle: { background: 'linear-gradient(145deg, #0d0d10 0%, #131318 60%, #090909 100%)' },
-    speed: 0.10,
-    zIndex: 40,
-    aspect: 'aspect-[4/3]',
-    imageSrc: '/media/projects/01.jpeg',
-  },
-  {
-    id: '03',
-    bgStyle: { background: 'linear-gradient(135deg, #0f0f0f 0%, #181818 55%, #0a0a0a 100%)' },
-    speed: 0.16,
-    zIndex: 50,
-    aspect: 'aspect-[3/4]',
-    imageSrc: '/media/projects/03.jpeg',
-  },
-  {
-    id: '05',
-    bgStyle: { background: 'linear-gradient(155deg, #0d0c0a 0%, #161410 55%, #0a0908 100%)' },
-    speed: 0.08,
-    zIndex: 80,
-    aspect: 'aspect-[4/3]',
-    imageSrc: '/media/projects/05.jpeg',
-  },
-]
-
-// RIGHT column — 4 items
-const RIGHT: Project[] = [
-  {
-    id: '04',
-    bgStyle: { background: 'linear-gradient(145deg, #0d0c0a 0%, #161410 55%, #0a0908 100%)' },
-    speed: 0.13,
-    zIndex: 20,
-    aspect: 'aspect-[4/3]',
-    imageSrc: '/media/projects/04.jpeg',
-  },
-  {
-    id: '06',
-    bgStyle: { background: 'linear-gradient(135deg, #0d0d10 0%, #131318 55%, #090909 100%)' },
-    speed: 0.18,
-    zIndex: 30,
-    aspect: 'aspect-[3/4]',
-    imageSrc: '/media/projects/06.jpeg',
-  },
-  {
-    id: '07',
-    bgStyle: { background: 'linear-gradient(145deg, #0d0c0a 0%, #161410 55%, #0a0908 100%)' },
-    speed: 0.14,
-    zIndex: 60,
-    aspect: 'aspect-[4/3]',
-    imageSrc: '/media/projects/07.jpeg',
-  },
-  {
-    id: '08',
-    bgStyle: { background: 'linear-gradient(155deg, #0c0c0e 0%, #141416 55%, #090909 100%)' },
-    speed: 0.11,
-    zIndex: 70,
-    aspect: 'aspect-[3/4]',
-    imageSrc: '/media/projects/08.jpeg',
-  },
-]
+const COLUMNS: Project[][] = [[], [], []]
+IMAGES.forEach((file, i) => {
+  const col = i % 3
+  COLUMNS[col].push({
+    src: `/media/projects/${file}`,
+    speed: SPEEDS[i % SPEEDS.length],
+    zIndex: i + 1, // later (lower) cards sit above earlier ones — weaves the overlaps
+    aspect: COLUMN_ASPECTS[col][COLUMNS[col].length],
+  })
+})
 
 // ─── Parallax card ──────────────────────────────────────────────────────────
 function CollageCard({ project }: { project: Project }) {
@@ -109,22 +89,13 @@ function CollageCard({ project }: { project: Project }) {
         style={{ y: innerY }}
         className="absolute inset-0 scale-[1.4] will-change-transform"
       >
-        {project.imageSrc ? (
-          <Image
-            src={project.imageSrc}
-            alt=""
-            fill
-            className="object-cover"
-            sizes="(max-width: 768px) 100vw, 60vw"
-          />
-        ) : (
-          <>
-            <div className="absolute inset-0" style={project.bgStyle} />
-            <div className="absolute bottom-3 left-3 font-body text-[8px] tracking-[0.3em] text-white/15 uppercase">
-              [ {project.id}.jpg — drop in /public/media/projects/ ]
-            </div>
-          </>
-        )}
+        <Image
+          src={project.src}
+          alt=""
+          fill
+          className="object-cover"
+          sizes="(max-width: 768px) 50vw, 40vw"
+        />
       </motion.div>
     </div>
   )
@@ -162,38 +133,28 @@ export default function Portfolio() {
         </div>
       </div>
 
-      {/* ── COLLAGE — two overlapping columns ── */}
+      {/* ── COLLAGE — three overlapping columns ── */}
       {/*
-        Left column:  58% wide, starts flush left
-        Right column: 58% wide, overlaps left by ~16%, starts ~18vh lower
-        Z-index weaves so columns alternate in front/behind each other
-        Each image parallaxes independently at a unique rate
+        Each column is 40% wide and overlaps its neighbour by 10%.
+        Columns step down (0 / 20% / 40% of width) and end at the same height.
+        Each image parallaxes independently at its own rate.
       */}
       <div className="relative flex items-start w-full overflow-visible pb-20">
-
-        {/* Left column */}
-        <div
-          className="flex flex-col gap-3 shrink-0"
-          style={{ width: '58%' }}
-        >
-          {LEFT.map((project) => (
-            <CollageCard key={project.id} project={project} />
-          ))}
-        </div>
-
-        {/* Right column — overlaps left, offset down */}
-        <div
-          className="flex flex-col gap-3 shrink-0"
-          style={{
-            width: '58%',
-            marginLeft: '-16%',
-            paddingTop: '18vh',
-          }}
-        >
-          {RIGHT.map((project) => (
-            <CollageCard key={project.id} project={project} />
-          ))}
-        </div>
+        {COLUMNS.map((column, c) => (
+          <div
+            key={c}
+            className="flex flex-col gap-3 shrink-0"
+            style={{
+              width: '40%',
+              marginLeft: c === 0 ? 0 : '-10%',
+              paddingTop: COLUMN_OFFSETS[c],
+            }}
+          >
+            {column.map((project) => (
+              <CollageCard key={project.src} project={project} />
+            ))}
+          </div>
+        ))}
       </div>
 
       {/* CTA */}

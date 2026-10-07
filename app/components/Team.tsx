@@ -19,21 +19,23 @@ const TEAM: TeamMember[] = [
     specialty: 'Photography · Strategy',
     bio: 'Building visual stories that move people. A decade in the field — on competition floors, event spaces, and everywhere in between. Every frame is intentional.',
     disciplines: ['Events', 'Combat Sports', 'Exp. Marketing', 'Brand'],
-    imageSrc: '/media/team/david.jpeg',
+    imageSrc: '/media/team/david.jpg',
   },
   {
-    name: 'Field Crew',
+    name: 'Rich',
     role: 'Lead Videographer',
     specialty: 'Cinematography · Grade',
     bio: 'From handheld grit to smooth cinematic lines, covering every environment from summit to ring.',
     disciplines: ['Film', 'Drone', 'Grade', 'Sound'],
+    imageSrc: '/media/team/rich.jpg',
   },
   {
-    name: 'Studio',
+    name: 'Erik',
     role: 'Design & Web',
     specialty: 'Branding · Development',
     bio: 'Identity, digital, and everything in between. Where the visual language of an athlete or brand gets built out into a full system.',
     disciplines: ['Identity', 'Web', 'Print', 'Motion'],
+    imageSrc: '/media/team/erik.jpg',
   },
 ]
 
