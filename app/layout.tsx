@@ -29,8 +29,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         {/* Film grain texture overlay */}
         <div className="grain-overlay" aria-hidden="true" />
         {children}
-        {/* Above the hero and work collage (z ≤ 20), below the mobile menu (z-40) and nav (z-50) */}
-        <DraupnirRings zIndex={30} />
+        <DraupnirRings />
       </body>
     </html>
   )
