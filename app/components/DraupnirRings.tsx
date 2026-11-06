@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, type CSSProperties } from 'react';
 
 /**
  * DraupnirRings
@@ -44,6 +44,8 @@ export type DraupnirRingsProps = {
   /** Throw rings on click. */
   clickBurst?: boolean;
   zIndex?: number;
+  /** Layer for the cursor ring alone, so it stays visible above a fixed header. */
+  cursorZIndex?: number;
 };
 
 const CREAM = [243, 239, 232] as const;
@@ -63,6 +65,7 @@ const DEFAULTS = {
   cursorRing: true,
   clickBurst: true,
   zIndex: 60,
+  cursorZIndex: 70,
 };
 
 /** Timing that rarely needs touching. */
@@ -84,6 +87,7 @@ const CURSOR_CLASS = 'draupnir-ring-cursor';
 
 export default function DraupnirRings(props: DraupnirRingsProps) {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
+  const cursorCanvasRef = useRef<HTMLCanvasElement | null>(null);
   const cfg = useRef({ ...DEFAULTS, ...stripUndefined(props) });
 
   // keep live config in sync without restarting the animation
@@ -93,9 +97,11 @@ export default function DraupnirRings(props: DraupnirRingsProps) {
 
   useEffect(() => {
     const cv = canvasRef.current;
-    if (!cv) return;
+    const ccv = cursorCanvasRef.current;
+    if (!cv || !ccv) return;
     const ctx = cv.getContext('2d');
-    if (!ctx) return;
+    const cctx = ccv.getContext('2d');
+    if (!ctx || !cctx) return;
 
     const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     const finePointer = window.matchMedia('(pointer: fine)').matches;
@@ -103,6 +109,8 @@ export default function DraupnirRings(props: DraupnirRingsProps) {
     // offscreen: rings are drawn once, then composited as halo + crisp pass
     const fx = document.createElement('canvas');
     const fctx = fx.getContext('2d')!;
+    const cfx = document.createElement('canvas');   // cursor ring, drawn on its own layer
+    const cfctx = cfx.getContext('2d')!;
     const lo = document.createElement('canvas');
     const lctx = lo.getContext('2d')!;
 
@@ -114,6 +122,10 @@ export default function DraupnirRings(props: DraupnirRingsProps) {
       ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
       fx.width = W * DPR; fx.height = H * DPR;
       fctx.setTransform(DPR, 0, 0, DPR, 0, 0);
+      ccv.width = W * DPR; ccv.height = H * DPR;
+      cctx.setTransform(DPR, 0, 0, DPR, 0, 0);
+      cfx.width = W * DPR; cfx.height = H * DPR;
+      cfctx.setTransform(DPR, 0, 0, DPR, 0, 0);
       lo.width = Math.max(1, Math.ceil(W * DPR * TIMING.bloomScale));
       lo.height = Math.max(1, Math.ceil(H * DPR * TIMING.bloomScale));
     };
@@ -368,33 +380,43 @@ export default function DraupnirRings(props: DraupnirRingsProps) {
         fctx.lineWidth = r.kind === 'carrier' ? TIMING.lineWidth + 0.2 : TIMING.lineWidth;
         strokeRing(fctx, r.x, r.y + (r.r * sc - ry), rx, ry, col, Math.max(0, fade));
       }
-      if (cur.alpha > 0.01) {
-        const col = c.color === 'gold' ? (GOLD as unknown as number[]) : (CREAM as unknown as number[]);
-        fctx.lineWidth = TIMING.lineWidth + 0.2;
-        strokeRing(fctx, cur.x, cur.y, cur.r, cur.r, col, cur.alpha);
-        fctx.globalAlpha = cur.alpha;
-        fctx.fillStyle = `rgb(${col[0]},${col[1]},${col[2]})`;
-        fctx.beginPath(); fctx.arc(cur.mx, cur.my, 1.8, 0, Math.PI * 2); fctx.fill();
-      }
       fctx.globalAlpha = 1;
 
-      ctx.clearRect(0, 0, W, H);
+      cfctx.clearRect(0, 0, W, H);
+      if (cur.alpha > 0.01) {
+        const col = c.color === 'gold' ? (GOLD as unknown as number[]) : (CREAM as unknown as number[]);
+        cfctx.lineWidth = TIMING.lineWidth + 0.2;
+        strokeRing(cfctx, cur.x, cur.y, cur.r, cur.r, col, cur.alpha);
+        cfctx.globalAlpha = cur.alpha;
+        cfctx.fillStyle = `rgb(${col[0]},${col[1]},${col[2]})`;
+        cfctx.beginPath(); cfctx.arc(cur.mx, cur.my, 1.8, 0, Math.PI * 2); cfctx.fill();
+      }
+      cfctx.globalAlpha = 1;
+
+      composite(ctx, fx);
+      composite(cctx, cfx);
+    };
+
+    /** Halo + crisp pass of an offscreen layer onto a visible canvas. */
+    const composite = (target: CanvasRenderingContext2D, src: HTMLCanvasElement) => {
+      const c = cfg.current;
+      target.clearRect(0, 0, W, H);
       if (c.glow > 0.01 && c.glowRadius > 0) {
         lctx.setTransform(1, 0, 0, 1, 0, 0);
         lctx.clearRect(0, 0, lo.width, lo.height);
         lctx.save();
         lctx.filter = `blur(${(c.glowRadius * DPR * TIMING.bloomScale).toFixed(2)}px)`;
-        lctx.drawImage(fx, 0, 0, lo.width, lo.height);
+        lctx.drawImage(src, 0, 0, lo.width, lo.height);
         lctx.restore();
-        ctx.save();
-        ctx.globalAlpha = Math.min(1, c.glow);
-        ctx.drawImage(lo, 0, 0, W, H);
-        ctx.restore();
+        target.save();
+        target.globalAlpha = Math.min(1, c.glow);
+        target.drawImage(lo, 0, 0, W, H);
+        target.restore();
       }
-      ctx.save();
-      if (c.softness > 0.01) ctx.filter = `blur(${(c.softness * 1.6).toFixed(2)}px)`;
-      ctx.drawImage(fx, 0, 0, W, H);
-      ctx.restore();
+      target.save();
+      if (c.softness > 0.01) target.filter = `blur(${(c.softness * 1.6).toFixed(2)}px)`;
+      target.drawImage(src, 0, 0, W, H);
+      target.restore();
     };
 
     let raf = 0;
@@ -423,6 +445,15 @@ export default function DraupnirRings(props: DraupnirRingsProps) {
   }, []);
 
   const color = props.color ?? DEFAULTS.color;
+  const canvasStyle = (zIndex: number): CSSProperties => ({
+    position: 'fixed',
+    inset: 0,
+    width: '100vw',
+    height: '100vh',
+    pointerEvents: 'none',
+    zIndex,
+    mixBlendMode: color === 'gold' ? 'normal' : 'difference',
+  });
 
   return (
     <>
@@ -435,18 +466,11 @@ export default function DraupnirRings(props: DraupnirRingsProps) {
           60% { transform: scale(1.25); } 100% { transform: scale(1); }
         }
       `}</style>
+      <canvas ref={canvasRef} aria-hidden="true" style={canvasStyle(props.zIndex ?? DEFAULTS.zIndex)} />
       <canvas
-        ref={canvasRef}
+        ref={cursorCanvasRef}
         aria-hidden="true"
-        style={{
-          position: 'fixed',
-          inset: 0,
-          width: '100vw',
-          height: '100vh',
-          pointerEvents: 'none',
-          zIndex: props.zIndex ?? DEFAULTS.zIndex,
-          mixBlendMode: color === 'gold' ? 'normal' : 'difference',
-        }}
+        style={canvasStyle(props.cursorZIndex ?? DEFAULTS.cursorZIndex)}
       />
     </>
   );
