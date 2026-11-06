@@ -11,7 +11,8 @@ const NAV_LINKS = [
 // Draupnir ring mark — Norse ring motif
 function RingMark({ className = '' }: { className?: string }) {
   return (
-    <svg viewBox="0 0 32 32" className={`w-5 h-5 ${className}`} aria-hidden="true">
+    // data-ring-origin: DraupnirRings spawns its rings here and animates this <svg>
+    <svg data-ring-origin viewBox="0 0 32 32" className={`w-5 h-5 ${className}`} aria-hidden="true">
       <circle cx="16" cy="16" r="12" fill="none" stroke="currentColor" strokeWidth="1.5" />
       <circle cx="16" cy="16" r="5"  fill="none" stroke="currentColor" strokeWidth="0.8" />
     </svg>
