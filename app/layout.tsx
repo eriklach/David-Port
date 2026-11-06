@@ -29,7 +29,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         {/* Film grain texture overlay */}
         <div className="grain-overlay" aria-hidden="true" />
         {children}
-        <DraupnirRings />
+        <DraupnirRings loader loaderOnce={false} />
       </body>
     </html>
   )
